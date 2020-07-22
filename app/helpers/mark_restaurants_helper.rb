@@ -1,0 +1,2 @@
+module MarkRestaurantsHelper
+end

@@ -1,0 +1,19 @@
+= form_tag(restaurant_infos_new_path, :method => 'get') do
+  = text_field_tag :search
+  = submit_tag 'Search'
+
+- if @rests
+  - @rests.each do |rest|
+    .card.mb-3 style=("max-width: 1000px;")
+      .row.no-gutters
+        .col-lg-6
+          = image_tag(rest["image_url"]["shop_image1"])
+        .col-lg-6
+          .card-body
+            p = "名前: #{rest["name"]}"
+            p = "カテゴリー: #{rest["category"]}"
+            p = "住所: #{rest["address"]}"
+
+            / restidが登録されている時のみボタンを表示するフェールセーフを組む
+            / = button_to '行ったお店', rest, method: :create, class: 'btn btn-primary'
+            = button_to "新規作成", {controller: 'restaurant_infos', action: 'create'}, {method: :get, params: rest ,class: "btn btn-default"}

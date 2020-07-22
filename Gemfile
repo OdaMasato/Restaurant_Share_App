@@ -40,6 +40,11 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+
+  # better_errors/binding_of_caller(デバッグ用)を導入する
+  gem 'better_errors'
+  gem 'binding_of_caller'
+
 end
 
 group :test do
@@ -52,3 +57,13 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+# slim(View出力のテンプレートエンジン)を導入する
+gem 'slim-rails'
+gem 'html2slim'
+
+# bootstrap(cssテンプレート)を導入する
+gem 'bootstrap'
+
+# devise(ユーザ認証機能のライブラリ)を導入する
+gem 'devise'
