@@ -1,8 +1,6 @@
 Rails.application.routes.draw do
 
   get 'pages/home'
-
-  # ☆見直す
   get 'restaurant_infos/new'
   get 'restaurant_infos/create'
   get 'mark_restaurants/create'
