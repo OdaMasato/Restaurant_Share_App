@@ -10,34 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_22_082719) do
+ActiveRecord::Schema.define(version: 2020_07_26_052350) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "follow_users", force: :cascade do |t|
+  create_table "follows", force: :cascade do |t|
     t.integer "user_id"
-    t.string "follow_userid"
+    t.integer "follow_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "mark_restaurants", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "restaurant_info_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "restaurant_infos", force: :cascade do |t|
-    t.string "address"
-    t.string "image_url_shop_image1"
+  create_table "restaurants", force: :cascade do |t|
+    t.string "rest_id"
+    t.string "image_url"
     t.string "opentime"
     t.string "holiday"
     t.string "pr_short"
+    t.string "address"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "restaurant_info_id"
   end
 
   create_table "users", force: :cascade do |t|

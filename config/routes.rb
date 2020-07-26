@@ -1,12 +1,12 @@
 Rails.application.routes.draw do
 
+  get 'restaurant/index'
+  post 'mark_restaurant/create'
   get 'pages/home'
-  get 'restaurant_infos/new'
-  get 'restaurant_infos/create'
-  get 'mark_restaurants/create'
+  get 'restaurant/index'
 
   # 開発用コード
-  root to: 'restaurant_infos#new'
+  root to: 'restaurant#index'
 
   # 本番コード
   # root to: 'pages#home'

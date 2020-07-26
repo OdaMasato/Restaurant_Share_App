@@ -2,8 +2,8 @@
 
 one:
   user_id: 1
-  restaurant_info_id: 1
+  restaurant_id: 1
 
 two:
   user_id: 1
-  restaurant_info_id: 1
+  restaurant_id: 1

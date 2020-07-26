@@ -2,8 +2,8 @@
 
 one:
   user_id: 1
-  follow_userid: MyString
+  follow_id: 1
 
 two:
   user_id: 1
-  follow_userid: MyString
+  follow_id: 1
