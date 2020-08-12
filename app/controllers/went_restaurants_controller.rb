@@ -1,0 +1,2 @@
+class WentRestaurantsController < ApplicationController
+end

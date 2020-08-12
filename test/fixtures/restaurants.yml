@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  rest_id: MyString
+  gurunavi_id: MyString
   image_url: MyString
   opentime: MyString
   holiday: MyString
@@ -9,7 +9,7 @@ one:
   address: MyString
 
 two:
-  rest_id: MyString
+  gurunavi_id: MyString
   image_url: MyString
   opentime: MyString
   holiday: MyString

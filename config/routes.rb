@@ -1,15 +1,12 @@
 Rails.application.routes.draw do
-
-  get 'restaurant/index'
-  post 'mark_restaurant/create'
-  get 'pages/home'
-  get 'restaurant/index'
+  get 'restaurants/index'
+  post 'mark_restaurants/create'
+  post 'mark_restaurants/destroy'
 
   # 開発用コード
-  root to: 'restaurant#index'
+  root to: 'restaurants#index'
 
   # 本番コード
   # root to: 'pages#home'
   devise_for :users
-
 end
