@@ -1,0 +1,14 @@
+    .card.mb-3 style=("max-width: 1000px;")
+      .row.no-gutters
+        .col-lg-6
+          = image_tag(@restaurant.image_url)
+        .col-lg-6
+          .card-body
+            p = "名前: #{@restaurant.name}"
+            p = "カテゴリ: #{@restaurant.category}"
+            p = "住所: #{@restaurant.address}"
+
+            - if @restaurant.mark_restaurant_user_reg
+              = button_to "行ったお店", {controller: 'mark_restaurants', action: 'destroy'}, {method: :post, params: @restaurant.attributes ,class: "btn btn-default"}
+            - else
+              = button_to "行きたいお店", {controller: 'mark_restaurants', action: 'create'}, {method: :post, params: @restaurant.attributes ,class: "btn btn-default"}
