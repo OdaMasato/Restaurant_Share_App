@@ -14,10 +14,11 @@
             p = "名前: #{restaurant.name}"
             p = "カテゴリ: #{restaurant.category}"
             p = "住所: #{restaurant.address}"
-            
-            - if restaurant.mark_restaurant_currentuser_reg_exist
-              / = button_to "行ったお店", {controller: 'mark_restaurants', action: 'destroy'}, {method: :post, params: @restaurant ,class: "btn btn-default"}
-              = button_to "行ったお店", {controller: 'mark_restaurants', action: 'destroy'}, {method: :post, params: @restaurant ,class: "btn btn-default"}
-            - else
 
+            - if restaurant.mark_restaurant_user_reg
+              = button_to "行ったお店", {controller: 'mark_restaurants', action: 'destroy'}, {method: :post, params: restaurant.attributes ,class: "btn btn-default"}
+            - else
               = button_to "行きたいお店", {controller: 'mark_restaurants', action: 'create'}, {method: :post, params: restaurant.attributes ,class: "btn btn-default"}
+
+            = link_to '詳細', restaurants_show_path(restaurant.attributes), class: 'btn btn-primary mr-3'
+

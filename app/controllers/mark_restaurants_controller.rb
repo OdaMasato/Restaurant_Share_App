@@ -3,25 +3,21 @@ class MarkRestaurantsController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    # RestaurantTableにレコード追加
-    gurunavi_id = params[:gurunavi_id]
-    if !(Restaurant.exists?(gurunavi_id: gurunavi_id))
-      restaurant = Restaurant.new
-      restaurant.gurunavi_id = gurunavi_id
-      restaurant.category = params[:category]
-      restaurant.name = params[:name]
-      restaurant.address = params[:address]
-      restaurant.image_url = params[:image_url]
-      restaurant.opentime = params[:opentime]
-      restaurant.holiday = params[:holiday]
-      restaurant.pr_short = params[:pr_short]
+    # パラメータからrestaurant情報を取得
+    restaurant = Restaurant.new
+    restaurant = Restaurant.get_param_restaurant(params)
+
+    # RestaurantTableに同一IDのレコードが存在しない場合、restaurantを登録する
+    if !(Restaurant.exists?(gurunavi_id: restaurant.gurunavi_id))
       restaurant.save!
+    else
+      # nop
     end
 
     # MarkRestaurantTableにレコード追加
     mark_restaurant = MarkRestaurant.new
     mark_restaurant.user_id = current_user.id
-    mark_restaurant.gurunavi_id = gurunavi_id 
+    mark_restaurant.gurunavi_id = restaurant.gurunavi_id 
     # ☆エラー処理するのが望ましい
     mark_restaurant.save!
 
@@ -29,8 +25,13 @@ class MarkRestaurantsController < ApplicationController
   end
 
   def destroy
+    # パラメータからrestaurant情報を取得
+    restaurant = Restaurant.new
+    restaurant = Restaurant.get_param_restaurant(params)
+
     # MarkRestaurantTableのレコード削除
-    mark_restaurant = MarkRestaurant.find(gurunavi_id: restaurant.gurunavi_id, user_id: current_user.id)
+    mark_restaurant = MarkRestaurant.find_by(gurunavi_id: restaurant.gurunavi_id, user_id: current_user.id)
     mark_restaurant.destroy!
+    redirect_to restaurants_index_path
   end
 end
