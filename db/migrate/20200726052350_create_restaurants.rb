@@ -9,6 +9,8 @@ class CreateRestaurants < ActiveRecord::Migration[6.0]
       t.string :address
       t.string :name
       t.string :category
+      t.string :tel
+      t.string :gurunavi_url
 
       t.timestamps
     end

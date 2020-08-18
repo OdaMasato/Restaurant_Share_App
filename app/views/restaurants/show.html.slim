@@ -5,10 +5,20 @@
         .col-lg-6
           .card-body
             p = "名前: #{@restaurant.name}"
-            p = "カテゴリ: #{@restaurant.category}"
+            p = "名前: #{@restaurant.pr_short}"
             p = "住所: #{@restaurant.address}"
+            p = "営業時間: #{@restaurant.opentime}"
+            p = "定休日: #{@restaurant.holiday}"
+            p = "電話番号: #{@restaurant.tel}"
+            p = "ぐるなび: #{@restaurant.gurunavi_url}"
+            p = "カテゴリ: #{@restaurant.category}"
 
             - if @restaurant.mark_restaurant_user_reg
               = button_to "行ったお店", {controller: 'mark_restaurants', action: 'destroy'}, {method: :post, params: @restaurant.attributes ,class: "btn btn-default"}
             - else
-              = button_to "行きたいお店", {controller: 'mark_restaurants', action: 'create'}, {method: :post, params: @restaurant.attributes ,class: "btn btn-default"}
+              = button_to "行った未登録お店", {controller: 'mark_restaurants', action: 'new'}, {method: :post, params: @restaurant.attributes ,class: "btn btn-default"}
+
+            - if @restaurant.went_restaurant_user_reg
+              = button_to "行きたいお店", {controller: 'went_restaurants', action: 'destroy'}, {method: :post, params: @restaurant.attributes ,class: "btn btn-default"}
+            - else
+              = button_to "行きたい未登録お店", {controller: 'went_restaurants', action: 'create'}, {method: :post, params: @restaurant.attributes ,class: "btn btn-default"}

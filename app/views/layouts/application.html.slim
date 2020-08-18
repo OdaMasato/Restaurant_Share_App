@@ -11,6 +11,14 @@ html
   body
   .app-title.navbar.navbar-expand-md.navbar-light.bg-light
     .navbar-brand Restaurant_Share_App
+
+    ul.navbar-nav.ml-auto
+      -if current_user
+        li.nav-item= link_to 'タイムライン(リンク未登録だよ)'
+        li.nav-item= link_to 'お店を探す', restaurants_index_path, class: 'nav-link'
+        li.nav-item= link_to 'ユーザを探す(リンク未登録だよ)'
+        li.nav-item= link_to 'マイページ(リンク未登録だよ)'
+
   .container
 
     - if user_signed_in?

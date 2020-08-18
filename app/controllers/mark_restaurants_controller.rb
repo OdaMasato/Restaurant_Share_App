@@ -4,7 +4,6 @@ class MarkRestaurantsController < ApplicationController
 
   def create
     # パラメータからrestaurant情報を取得
-    restaurant = Restaurant.new
     restaurant = Restaurant.get_param_restaurant(params)
 
     # RestaurantTableに同一IDのレコードが存在しない場合、restaurantを登録する
@@ -17,7 +16,11 @@ class MarkRestaurantsController < ApplicationController
     # MarkRestaurantTableにレコード追加
     mark_restaurant = MarkRestaurant.new
     mark_restaurant.user_id = current_user.id
-    mark_restaurant.gurunavi_id = restaurant.gurunavi_id 
+    mark_restaurant.gurunavi_id = restaurant.gurunavi_id
+
+    # # ☆スコア入力ロジック未実装(取り急ぎ、2.0固定)
+    # mark_restaurant.score = 2.0
+
     # ☆エラー処理するのが望ましい
     mark_restaurant.save!
 
@@ -33,5 +36,9 @@ class MarkRestaurantsController < ApplicationController
     mark_restaurant = MarkRestaurant.find_by(gurunavi_id: restaurant.gurunavi_id, user_id: current_user.id)
     mark_restaurant.destroy!
     redirect_to restaurants_index_path
+  end
+
+  def new
+    @restaurant = Restaurant.get_param_restaurant(params)
   end
 end

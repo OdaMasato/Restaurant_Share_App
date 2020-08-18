@@ -66,3 +66,7 @@ gem 'bootstrap'
 
 # devise(ユーザ認証機能のライブラリ)を導入する
 gem 'devise'
+
+# pry-hoge(デバッグ用ライブラリ)を導入する
+gem 'pry-rails'
+gem 'pry-doc'

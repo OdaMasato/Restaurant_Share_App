@@ -3,6 +3,8 @@
   = text_field_tag :search
   = submit_tag 'Search'
 
+p = "#{@total_hit_count} 件の候補が見つかりました"
+
 - if @restaurants
   - @restaurants.each do |restaurant|
     .card.mb-3 style=("max-width: 1000px;")
@@ -12,13 +14,22 @@
         .col-lg-6
           .card-body
             p = "名前: #{restaurant.name}"
-            p = "カテゴリ: #{restaurant.category}"
             p = "住所: #{restaurant.address}"
+            p = "営業時間: #{restaurant.opentime}"
+            p = "定休日: #{restaurant.holiday}"
+            p = "カテゴリ: #{restaurant.category}"
+
 
             - if restaurant.mark_restaurant_user_reg
-              = button_to "行ったお店", {controller: 'mark_restaurants', action: 'destroy'}, {method: :post, params: restaurant.attributes ,class: "btn btn-default"}
+              = button_to "行ったお店", {controller: 'mark_restaurants', action: 'destroy'}, {method: :post, params: restaurant.attributes ,class: "btn btn-primary mr-3"}
             - else
-              = button_to "行きたいお店", {controller: 'mark_restaurants', action: 'create'}, {method: :post, params: restaurant.attributes ,class: "btn btn-default"}
+              = button_to "行った未登録お店", {controller: 'mark_restaurants', action: 'new'}, {method: :post, params: restaurant.attributes ,class: "btn btn-primary mr-3"}
 
             = link_to '詳細', restaurants_show_path(restaurant.attributes), class: 'btn btn-primary mr-3'
+
+            - if restaurant.went_restaurant_user_reg
+              = button_to "行きたいお店", {controller: 'went_restaurants', action: 'destroy'}, {method: :post, params: restaurant.attributes ,class: "btn btn-primary mr-3"}
+            - else
+              = button_to "行きたい未登録のお店", {controller: 'went_restaurants', action: 'create'}, {method: :post, params: restaurant.attributes ,class: "btn btn-primary mr-3"}
+
 

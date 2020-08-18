@@ -17,6 +17,7 @@ class RestaurantsController < ApplicationController
     # HTTPリクエスト及びレスポンス(json)を取得し、Restaurant配列にセットする
     results = Gnavi.get_http_res_json(gnavi_url)
     @restaurants = Restaurant.get_gnavi_params_restaurants_arg(results)
+    @total_hit_count = results['total_hit_count']
   end
 
   def show

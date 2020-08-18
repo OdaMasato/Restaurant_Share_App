@@ -1,8 +1,9 @@
 class Restaurant < ApplicationRecord
-  # ☆mark_restaurant_user_reg名前変えたい
-  attr_accessor :mark_restaurant_user_reg
 
-  # has_many :mark_restaurant
+  has_many :MarkRestaurant, primary_key: 'gurunavi_id', foreign_key: 'gurunavi_id'
+  has_many :User, through: :MarkRestaurant
+
+  attr_accessor :mark_restaurant_user_reg ,:went_restaurant_user_reg
 
   # [概　要] ぐるなびのレストラン検索APIのレスポンスパラメータからrestaurant配列を取得
   # [引　数] ぐるなび レストラン検索APIレスポンスパラメータ(json)
@@ -22,7 +23,10 @@ class Restaurant < ApplicationRecord
       restaurant.opentime = param['opentime']
       restaurant.holiday = param['holiday']
       restaurant.pr_short = param['pr_short']
+      restaurant.tel = param['tel']
+      restaurant.gurunavi_url = param['url']
       set_mark_restaurant_user_reg(restaurant)
+      set_went_restaurant_user_reg(restaurant)
       restaurants << restaurant
     end
     restaurants
@@ -42,7 +46,10 @@ class Restaurant < ApplicationRecord
     restaurant.opentime = params[:opentime]
     restaurant.holiday = params[:holiday]
     restaurant.pr_short = params[:pr_short]
+    restaurant.tel = params[:tel]
+    restaurant.gurunavi_url = params[:gurunavi_url]
     set_mark_restaurant_user_reg(restaurant)
+    set_went_restaurant_user_reg(restaurant)
     restaurant
   end
 
@@ -58,6 +65,19 @@ class Restaurant < ApplicationRecord
       restaurant.mark_restaurant_user_reg = true
     else
       restaurant.mark_restaurant_user_reg = false     
+    end
+  end
+
+  # [概　要] Restaurantオブジェクトのwent_restaurant_user_regをセットする
+  # [引　数] Restaurantオブジェクト
+  # [戻り値] Restaurantオブジェクト
+  # [説　明] 引数のRestaurantオブジェクト情報のWentRestaurantテーブルに登録有無を返す
+  def self.set_went_restaurant_user_reg(restaurant)
+    # WentRestaurantテーブルの登録有無をrestaurantインスタンスに格納する
+    if WentRestaurant.exists?(gurunavi_id: restaurant.gurunavi_id)
+      restaurant.went_restaurant_user_reg = true
+    else
+      restaurant.went_restaurant_user_reg = false     
     end
   end
 end
