@@ -1,0 +1,21 @@
+h1
+  | ユーザーを探す
+
+= form_with url: users_index_path,method: 'get', local: true do |f|
+  .form-group
+    = f.text_field :search, class: 'form-control', id: 'score'
+  = f.submit '検索', class: 'btn btn-primary'
+
+
+- if @users
+  - @users.each do |user|
+    .card.mb-3 style=("max-width: 1000px;")
+      .row.no-gutters
+        .col-lg-6
+          = image_tag("")
+        .col-lg-6
+          .card-body
+            p = "名前: #{user.account_name}"
+            p = "id: #{user.account_id}"
+
+            = button_to "詳細画面", {controller: 'follows', action: 'show'}, {method: :post, params: user.attributes ,class: "btn btn-primary mr-3"}

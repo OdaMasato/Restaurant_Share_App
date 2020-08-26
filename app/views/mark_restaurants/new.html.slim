@@ -1,3 +1,20 @@
 p レビュー結果を書くページだよ
 
-= button_to "行きたいお店に登録します(scoreは未登録)", {controller: 'mark_restaurants', action: 'create'}, {method: :post, params: @restaurant.attributes ,class: "btn btn-primary mr-3"}
+= form_with url: mark_restaurants_create_path, local: true do |f|
+  .form-group
+    = f.label :score
+    = f.number_field :score, class: 'form-control', id: 'score'
+    = f.hidden_field :gurunavi_id, value: @restaurant.gurunavi_id
+    = f.hidden_field :category, value: @restaurant.category
+    = f.hidden_field :name, value: @restaurant.name
+    = f.hidden_field :address, value: @restaurant.address
+    = f.hidden_field :image_url, value: @restaurant.image_url
+    = f.hidden_field :opentime, value: @restaurant.opentime
+    = f.hidden_field :holiday, value: @restaurant.holiday
+    = f.hidden_field :pr_short, value: @restaurant.pr_short
+    = f.hidden_field :tel, value: @restaurant.tel
+    = f.hidden_field :gurunavi_url, value: @restaurant.gurunavi_url
+  = f.submit nil, class: 'btn btn-primary'
+
+
+p= @restaurant.attributes

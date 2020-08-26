@@ -1,30 +1,32 @@
 class Restaurant < ApplicationRecord
 
-  has_many :MarkRestaurant, primary_key: 'gurunavi_id', foreign_key: 'gurunavi_id'
+  # アソシエーション
+  has_many :MarkRestaurant,primary_key: 'gurunavi_id', foreign_key: 'gurunavi_id'
   has_many :User, through: :MarkRestaurant
 
+  # accessor
   attr_accessor :mark_restaurant_user_reg ,:went_restaurant_user_reg
 
   # [概　要] ぐるなびのレストラン検索APIのレスポンスパラメータからrestaurant配列を取得
   # [引　数] ぐるなび レストラン検索APIレスポンスパラメータ(json)
   # [戻り値] 正常完了:restaurant[] / 正常完了以外:nil
   # [説　明] 引数のパラメータより飲食店情報を取得し、restaurant配列として返す
-  def self.get_gnavi_params_restaurants_arg(params)
+  def self.get_gurunavi_params_restaurants_arg(params)
     restaurants = []
-    params = params['rest']
+    params = params[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_REST]
 
     params.each do |param|
       restaurant = Restaurant.new
-      restaurant.gurunavi_id = param['id']
-      restaurant.category = param['category']
-      restaurant.name = param['name']
-      restaurant.address = param['address']
-      restaurant.image_url = param['image_url']['shop_image1']
-      restaurant.opentime = param['opentime']
-      restaurant.holiday = param['holiday']
-      restaurant.pr_short = param['pr_short']
-      restaurant.tel = param['tel']
-      restaurant.gurunavi_url = param['url']
+      restaurant.gurunavi_id = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_ID]
+      restaurant.category = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_CATEGORY]
+      restaurant.name = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_NAME]
+      restaurant.address = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_ADDRESS]
+      restaurant.image_url = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_IMAGE_URL][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_IMAGE_SHOP_IMAGE1]
+      restaurant.opentime = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_OPENTIME]
+      restaurant.holiday = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_HORIDAY]
+      restaurant.pr_short = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_PR_SHORT]
+      restaurant.tel = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_TEL]
+      restaurant.gurunavi_url = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_URL]
       set_mark_restaurant_user_reg(restaurant)
       set_went_restaurant_user_reg(restaurant)
       restaurants << restaurant
@@ -52,6 +54,34 @@ class Restaurant < ApplicationRecord
     set_went_restaurant_user_reg(restaurant)
     restaurant
   end
+
+  # [概　要] ぐるなびのレストラン検索APIのレスポンスパラメータからrestaurant配列を取得
+  # [引　数] ぐるなび レストラン検索APIレスポンスパラメータ(json)
+  # [戻り値] 正常完了:restaurant[] / 正常完了以外:nil
+  # [説　明] 引数のパラメータより飲食店情報を取得し、restaurant配列として返す
+  def self.get_user_mark_restaurants_arg(user_id)
+    restaurants = []
+    params = params[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_REST]
+
+    params.each do |param|
+      restaurant = Restaurant.new
+      restaurant.gurunavi_id = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_ID]
+      restaurant.category = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_CATEGORY]
+      restaurant.name = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_NAME]
+      restaurant.address = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_ADDRESS]
+      restaurant.image_url = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_IMAGE_URL][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_IMAGE_SHOP_IMAGE1]
+      restaurant.opentime = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_OPENTIME]
+      restaurant.holiday = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_HORIDAY]
+      restaurant.pr_short = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_PR_SHORT]
+      restaurant.tel = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_TEL]
+      restaurant.gurunavi_url = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_URL]
+      set_mark_restaurant_user_reg(restaurant)
+      set_went_restaurant_user_reg(restaurant)
+      restaurants << restaurant
+    end
+    restaurants
+  end
+
 
   private
 

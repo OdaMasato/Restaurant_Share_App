@@ -1,23 +1,22 @@
 class RestaurantsController < ApplicationController
-  require 'Gnavi'
+  require 'Gurunavi'
 
   def index
-    # ぐるなびのレストラン検索APIへのURLを作成
-    gnavi_url = 'https://api.gnavi.co.jp/RestSearchAPI/v3/?keyid='
+    # ぐるなびレストラン検索APIのフリワード検索URLを取得
+    url = Gurunavi.get_freeword_search_url(params[:search])
 
-    # credentialsに登録しているアクセスキーを取得
-    api_key = Rails.application.credentials.dig(:grunavi, :api_key)
-    gnavi_url << api_key
+    # フリワード検索を行い、ハッシュ化したレスポンス(json)を取得
+    results = Gurunavi.get_http_res_json(url)
 
-    # 検索文字列とURLを連結
-    word = params[:search]
-    word ||= ''
-    gnavi_url << '&name=' << word
-
-    # HTTPリクエスト及びレスポンス(json)を取得し、Restaurant配列にセットする
-    results = Gnavi.get_http_res_json(gnavi_url)
-    @restaurants = Restaurant.get_gnavi_params_restaurants_arg(results)
-    @total_hit_count = results['total_hit_count']
+    if !(results.nil?)
+      # 取得成功の場合
+      # レスポンスからRestaurant情報を取得
+      @restaurants = Restaurant.get_gurunavi_params_restaurants_arg(results)
+      @total_hit_count = results[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_HIT_COUNT]
+    else
+      # 取得失敗の場合
+      @total_hit_count = Gurunavi::GURUNAVI_RESTAURANT_SEARCH_HIT_COUNT_ZERO
+    end
   end
 
   def show
