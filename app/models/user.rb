@@ -7,5 +7,8 @@ class User < ApplicationRecord
 
   has_many :MarkRestaurant,foreign_key: 'user_id'
   has_many :Restaurant, through: :MarkRestaurant
+
+  has_many :WentRestaurant,foreign_key: 'user_id'
+  has_many :Restaurant, through: :WentRestaurant
   has_many :Follow
 end

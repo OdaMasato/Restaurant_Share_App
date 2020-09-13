@@ -1,1 +1,111 @@
 @import "bootstrap";
+@import 'font-awesome-sprockets';
+@import 'font-awesome';
+
+.pagination {
+  justify-content: center;
+}
+
+.restaurant_index_header_main {
+  display: inline;
+  text-decoration: none;
+  font-weight: bold;
+  list-style: none;
+  color: #343a40;
+  font-size: 20px; 
+}
+
+.restaurant_index_header_sub {
+  display: inline;
+  text-decoration: none;
+  list-style: none;
+  color: #343a40;
+  font-size: 14px; 
+}
+
+.score_icon {
+  color:darkorange;
+  font-size: 20px; 
+}
+
+.score_text {
+  display: inline;
+  color:crimson;
+  font-size: 20px; 
+}
+
+.restaurant_index_body_item_text {
+  text-decoration: none;
+  list-style: none;
+  color: #343a40;
+  margin-top: 10px;
+}
+
+.restaurant_index_body_pr_text {
+  display: inline;
+  text-decoration: underline;
+  font-style: oblique;
+  list-style: none;
+  color: #343a40;
+}
+
+.restaurant_index_body_score_item_text {
+  text-decoration: none;
+  list-style: none;
+  color: #343a40;
+}
+
+.mark_went_restaurant_btn {
+  width: 74px;
+  font-size: 14px; 
+  text-align: center;
+  display: inline-block;
+  padding: 0.3em;
+  margin-top: 25px;
+  margin-right: 5px;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: .4s;
+}
+
+.mark_went_restaurant_btn.normal-border {
+  color: darkorange;
+  border: solid 2px darkorange;
+}
+.mark_went_restaurant_btn.normal-border:hover {
+  background: darkorange;
+  color: white;
+}
+
+.mark_went_restaurant_btn.selected-border {
+  background: darkorange;
+  color: white;
+  border: solid 2px darkorange;
+}
+  
+.mark_went_restaurant_btn.selected-border:hover {
+  background: white;
+  color: darkorange;
+}
+
+.gurunavi_btn {
+  width: 74px;
+  font-size: 14px; 
+  text-align: center;
+  display: inline-block;
+  padding: 0.3em;
+  margin-top: 25px;
+  margin-right: 5px;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: .4s;
+}
+
+.gurunavi_btn.normal-border {
+  color: black;
+  border: solid 2px black;
+}
+.gurunavi_btn.normal-border:hover {
+  color: white;
+  background: black;
+}

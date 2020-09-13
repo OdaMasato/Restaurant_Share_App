@@ -70,3 +70,9 @@ gem 'devise'
 # pry-hoge(デバッグ用ライブラリ)を導入する
 gem 'pry-rails'
 gem 'pry-doc'
+
+# kaminariを導入する
+gem 'kaminari'
+
+# font-awesome-sassを導入する
+gem 'font-awesome-sass'

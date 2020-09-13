@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   get 'restaurants/index'
   get 'restaurants/show'
   
-  post 'mark_restaurants/new'
+  get 'mark_restaurants/new'
   post 'mark_restaurants/create'
   post 'mark_restaurants/destroy'
 

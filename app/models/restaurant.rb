@@ -1,11 +1,15 @@
 class Restaurant < ApplicationRecord
 
+  # 定数
+  RESTAURANT_ACCER_ZERO = 0
+
   # アソシエーション
   has_many :MarkRestaurant,primary_key: 'gurunavi_id', foreign_key: 'gurunavi_id'
+  has_many :WentRestaurant,primary_key: 'gurunavi_id', foreign_key: 'gurunavi_id'
   has_many :User, through: :MarkRestaurant
 
   # accessor
-  attr_accessor :mark_restaurant_user_reg ,:went_restaurant_user_reg
+  attr_accessor :mark_restaurant_user_reg, :went_restaurant_user_reg, :score, :mark_restaurant_count, :went_restaurant_count
 
   # [概　要] ぐるなびのレストラン検索APIのレスポンスパラメータからrestaurant配列を取得
   # [引　数] ぐるなび レストラン検索APIレスポンスパラメータ(json)
@@ -24,9 +28,16 @@ class Restaurant < ApplicationRecord
       restaurant.image_url = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_IMAGE_URL][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_IMAGE_SHOP_IMAGE1]
       restaurant.opentime = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_OPENTIME]
       restaurant.holiday = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_HORIDAY]
-      restaurant.pr_short = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_PR_SHORT]
+      restaurant.pr_short = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_PR][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_PR_SHORT]
       restaurant.tel = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_TEL]
       restaurant.gurunavi_url = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_URL]
+      restaurant.access_line = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS_LINE]
+      restaurant.access_station = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS_STATION ]
+      restaurant.access_station_exit = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS_STATION_EXIT]
+      restaurant.access_walk = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS_WALK]
+      restaurant.access_note = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS_NOTE]
+      restaurant.budget = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_BUDGET]
+
       set_mark_restaurant_user_reg(restaurant)
       set_went_restaurant_user_reg(restaurant)
       restaurants << restaurant
@@ -50,38 +61,16 @@ class Restaurant < ApplicationRecord
     restaurant.pr_short = params[:pr_short]
     restaurant.tel = params[:tel]
     restaurant.gurunavi_url = params[:gurunavi_url]
+    restaurant.access_line = params[:access_line]
+    restaurant.access_station = params[:access_station]
+    restaurant.access_station_exit = params[:access_station_exit]
+    restaurant.access_walk = params[:access_walk]
+    restaurant.access_note = params[:access_note]
+    restaurant.budget = params[:budget]
     set_mark_restaurant_user_reg(restaurant)
     set_went_restaurant_user_reg(restaurant)
     restaurant
   end
-
-  # [概　要] ぐるなびのレストラン検索APIのレスポンスパラメータからrestaurant配列を取得
-  # [引　数] ぐるなび レストラン検索APIレスポンスパラメータ(json)
-  # [戻り値] 正常完了:restaurant[] / 正常完了以外:nil
-  # [説　明] 引数のパラメータより飲食店情報を取得し、restaurant配列として返す
-  def self.get_user_mark_restaurants_arg(user_id)
-    restaurants = []
-    params = params[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_REST]
-
-    params.each do |param|
-      restaurant = Restaurant.new
-      restaurant.gurunavi_id = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_ID]
-      restaurant.category = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_CATEGORY]
-      restaurant.name = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_NAME]
-      restaurant.address = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_ADDRESS]
-      restaurant.image_url = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_IMAGE_URL][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_IMAGE_SHOP_IMAGE1]
-      restaurant.opentime = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_OPENTIME]
-      restaurant.holiday = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_HORIDAY]
-      restaurant.pr_short = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_PR_SHORT]
-      restaurant.tel = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_TEL]
-      restaurant.gurunavi_url = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_URL]
-      set_mark_restaurant_user_reg(restaurant)
-      set_went_restaurant_user_reg(restaurant)
-      restaurants << restaurant
-    end
-    restaurants
-  end
-
 
   private
 
@@ -109,5 +98,50 @@ class Restaurant < ApplicationRecord
     else
       restaurant.went_restaurant_user_reg = false     
     end
+  end
+
+  # [概　要] Restaurantオブジェクトのaccessorに値を代入する
+  # [引　数] Restaurantオブジェクト(配列 or 単体)
+  # [戻り値] Restaurantオブジェクト
+  # [説　明] Restaurantオブジェクトのscoreにmark_restaurantのscore平均をセットする
+  def self.set_accessor(restaurant_org)
+
+    if Array == restaurant_org.class 
+      # 引数が配列型の場合
+      restaurants = []
+      restaurant_org.each do |restaurant|
+        restaurant = set_accessor_get_model_value(restaurant)
+        restaurants << restaurant
+      end
+      restaurants
+    else
+      # 上記以外の場合
+      restaurant = set_accessor_get_model_value(restaurant_org)
+      restaurant
+    end
+  end
+
+  # [概　要] set_accessorの作業用メソッド Restaurantオブジェクトのaccessorに値を代入する(modelからの値取得処理)
+  # [引　数] Restaurantオブジェクト
+  # [戻り値] Restaurantオブジェクト
+  # [説　明] Restaurantオブジェクトのscoreにmark_restaurantのscore平均をセットする
+  def self.set_accessor_get_model_value(restaurant)
+    # restaurantのgurunavi_idがMarkRestaurantテーブルに登録有無されているかどうか
+    if MarkRestaurant.exists?(gurunavi_id: restaurant.gurunavi_id)
+      restaurant.score = MarkRestaurant.where(gurunavi_id: restaurant.gurunavi_id).average(:score)
+      restaurant.mark_restaurant_count = MarkRestaurant.where(gurunavi_id: restaurant.gurunavi_id).count(:gurunavi_id)
+    else
+      restaurant.score = RESTAURANT_ACCER_ZERO
+      restaurant.mark_restaurant_count = RESTAURANT_ACCER_ZERO
+    end
+
+    # restaurantのgurunavi_idがWentRestaurantテーブルに登録有無されているかどうか
+    if WentRestaurant.exists?(gurunavi_id: restaurant.gurunavi_id)
+      restaurant.went_restaurant_count = WentRestaurant.where(gurunavi_id: restaurant.gurunavi_id).count(:gurunavi_id)
+    else
+      restaurant.went_restaurant_count = RESTAURANT_ACCER_ZERO
+    end
+
+    restaurant
   end
 end

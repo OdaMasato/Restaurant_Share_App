@@ -2,31 +2,34 @@ doctype html
 html
   head
     title
-      | RestaurantShareApp
+      | ぐるとも！
     = csrf_meta_tags
     = csp_meta_tag
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
 
-  body
-  .app-title.navbar.navbar-expand-md.navbar-light.bg-light
-    .navbar-brand Restaurant_Share_App
+  body.p-3.mb-2.bg-dark.text-light
+    nav.navbar.fixed-top.navbar-expand-md.navbar-light style="background-color: #ffffff;"
+      a.navbar-brand href="#"
+        img height="30" src="/assets/gurutomo_logo.jpeg" width="150" alt="ぐるとも！" 
 
-    ul.navbar-nav.ml-auto
-      -if current_user
-        li.nav-item= link_to 'タイムライン(リンク未登録だよ)'
-        li.nav-item= link_to 'お店を探す', restaurants_index_path, class: 'nav-link'
-        li.nav-item= link_to 'ユーザを探す', users_index_path, class: 'nav-link'
-        li.nav-item= link_to 'マイページ', users_show_path, class: 'nav-link'
+      button.navbar-toggler aria-controls="navbar-content" aria-expanded="false" aria-label=("Toggle navigation") data-target="#navbar-content" data-toggle="collapse" type="button" 
+        span.navbar-toggler-icon
+      #navbarSupportedContent.collapse.navbar-collapse.justify-content-end
+        ul.navbar-nav.ml-auto
+          - if current_user
+            li.nav-item = link_to 'タイムライン', restaurants_index_path, class: 'nav-link'
+            li.nav-item = link_to 'お店を探す', restaurants_index_path, class: 'nav-link'
+            li.nav-item = link_to 'ユーザを探す', users_index_path, class: 'nav-link'
+            li.nav-item = link_to 'マイページ', users_show_path, class: 'nav-link'
+            li.nav-item = link_to "ログアウト", destroy_user_session_path, method: :delete, class: 'nav-link'
+
+          - else
+            li.nav-item = link_to "新規登録", new_user_registration_path, class: 'nav-link'
+            li.nav-item = link_to "ログイン", new_user_session_path, class: 'nav-link'
+
 
   .container
-
-    - if user_signed_in?
-      = link_to "ログアウト", destroy_user_session_path, method: :delete
-    - else
-      = link_to "新規登録", new_user_registration_path
-      = link_to "ログイン", new_user_session_path
-
     p.notice = notice
     p.alert = alert
 
