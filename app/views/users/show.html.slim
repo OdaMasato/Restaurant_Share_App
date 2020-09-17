@@ -1,35 +1,51 @@
-h1
-  | mark_restauran/index
+| ※現在メンテナンス中
 
-= link_to 'ユーザ設定', users_show_path, class: 'btn btn-primary mr-3'
-= link_to @follows, follows_index_path('folllow'), class: 'btn btn-primary mr-3'
+.container
+  .row.bg-light.text-dark.border-bottom
+    .col-md-3
+      img height="30" src="/assets/gurutomo_logo.jpeg" width="150" alt="ぐるとも！"
+        
+    .col-md-6
+      .user_name = @user.account_name
+      .user_id = "@#{@user.account_id}"
 
+    .col-md-3
+      = link_to 'プロフィール編集', users_show_path, class: 'user_setting_btn'
 
-p
-  = @user.account_name
-p
-  = @user.account_id
+  .row.bg-light.text-dark.border-bottom
+    .col-md-12
+    = link_to follows_index_path('folllow'), class: 'user_info_basic_btn mark_restaurant-selected-border', method: :post
+      i.fas.fa-bookmark 
+      br
+        = "#{@follows}"
+
+    = link_to follows_index_path('folllow'), class: 'user_info_basic_btn mark_restaurant-normal-border', method: :get
+      i.fas.fa-eye
+      br
+        = "#{@follows}"
+
+    = link_to follows_index_path('folllow'), class: 'user_info_basic_btn', method: :post
+      | Following
+      br
+        = "#{@follows}"
+
+    = link_to follows_index_path('folllow'), class: 'user_info_basic_btn', method: :post
+      | Followers
+      br
+        = "#{@follows}"
 
 - if @restaurants
+  - col_count = 1
   - @restaurants.each do |restaurant|
-    .card.mb-3 style=("max-width: 1000px;")
-      .row.no-gutters
-        .col-lg-6
-          = image_tag(restaurant.image_url)
-        .col-lg-6
-          .card-body
-            p = "名前: #{restaurant.name}"
-            p = "住所: #{restaurant.address}"
-            p = "営業時間: #{restaurant.opentime}"
-            p = "定休日: #{restaurant.holiday}"
-            p = "カテゴリ: #{restaurant.category}"
+      - if 1 == (col_count % 2) 
+        / 行に対して1件目の店舗情報を表示する場合
+        .container
+          .row
 
-            - if restaurant.mark_restaurant_user_reg
-              = button_to "行ったお店", {controller: 'mark_restaurants', action: 'destroy'}, {method: :post, params: restaurant.attributes ,class: "btn btn-primary mr-3"}
-            - else
-              = button_to "行った未登録お店", {controller: 'mark_restaurants', action: 'new'}, {method: :post, params: restaurant.attributes ,class: "btn btn-primary mr-3"}
+      .col-md-6.my-2
+        = render partial: 'restaurants/restaurant_list', locals: {restaurant: restaurant}
 
-            - if restaurant.went_restaurant_user_reg
-              = button_to "行きたいお店", {controller: 'went_restaurants', action: 'destroy'}, {method: :post, params: restaurant.attributes ,class: "btn btn-primary mr-3"}
-            - else
-              = button_to "行きたい未登録のお店", {controller: 'went_restaurants', action: 'create'}, {method: :post, params: restaurant.attributes ,class: "btn btn-primary mr-3"}
+      - col_count+=1
+
+
+= paginate @restaurants

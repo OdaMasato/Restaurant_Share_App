@@ -1,0 +1,69 @@
+/ 店舗情報hedder
+.row.bg-light.text-dark.border-bottom.mr-1
+  .col-md-12.my-2
+    = link_to "#{restaurant.name}", restaurants_show_path(restaurant.attributes), class: "restaurant_index_header_main"
+    .restaurant_index_header_sub  = "　#{restaurant.category}　""#{restaurant.access_station}から徒歩#{restaurant.access_walk}分"
+
+    / 評価平均
+    .score_icon
+      - score_tmp = restaurant.score
+      - for i in (1..5) do
+        - if (0 < score_tmp)
+          - if (1 <= score_tmp)
+            i.fas.fa-star
+          - else
+            i.fas.fa-star-half-alt
+        - else
+          i.far.fa-star
+        - score_tmp-=1
+      .score_text = " #{restaurant.score}"
+
+/ 店舗情報body
+.row.bg-white.text-dark.py-4.mb-4.mr-1
+  .col-md-3
+    = link_to restaurants_show_path(restaurant.attributes), class: "restaurant_index_header_main"
+      = image_tag(restaurant.image_url)
+
+  .col-md-9
+    / PR文
+    p = link_to "#{restaurant.pr_short}", restaurants_show_path(restaurant.attributes), class: "restaurant_index_body_pr_text"
+
+    / 平均予算
+    .row
+      .col-md-2
+        .restaurant_index_body_item_text = "平均予算　："
+      .col-md-10
+        .restaurant_index_body_item_text = "#{restaurant.budget}円"
+
+    / 定休日
+    .row
+      .col-md-2
+        .restaurant_index_body_item_text = "定休日　　："
+      .col-md-10
+        .restaurant_index_body_item_text = "#{restaurant.holiday}"
+
+    / 営業時間
+    .row
+      .col-md-2
+        .restaurant_index_body_item_text = "営業時間　："
+      .col-md-10
+        .restaurant_index_body_item_text = "#{restaurant.opentime}"
+    
+    .row
+      .col-md-12
+        / 行ったお店ボタン
+        - if restaurant.mark_restaurant_user_reg
+          = link_to mark_restaurants_destroy_path(restaurant.attributes), class: 'mark_went_restaurant_btn selected-border', method: :post
+            i.fas.fa-bookmark = " #{restaurant.mark_restaurant_count}"
+          
+        - else
+          = link_to mark_restaurants_new_path(restaurant.attributes), class: 'mark_went_restaurant_btn normal-border', method: :get
+            i.fas.fa-bookmark = " #{restaurant.mark_restaurant_count}"
+
+        / 行きたいお店ボタン
+        - if restaurant.went_restaurant_user_reg
+          = link_to went_restaurants_destroy_path(restaurant.attributes), class: 'mark_went_restaurant_btn selected-border', method: :post
+            i.fas.fa-eye = " #{restaurant.went_restaurant_count}"
+        - else
+          = link_to went_restaurants_create_path(restaurant.attributes), class: 'mark_went_restaurant_btn normal-border', method: :post
+            i.fas.fa-eye = " #{restaurant.went_restaurant_count}"

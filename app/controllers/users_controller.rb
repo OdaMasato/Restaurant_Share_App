@@ -1,23 +1,14 @@
 class UsersController < ApplicationController
   def show
-
     # ログイン中ユーザのuser情報を取得
-    @user = User.find_by(id: current_user.id)
-    @follows = Follow.where(user_id: current_user.id).count 
-    @followee  = Follow.where(follow_id: current_user.id).count
+    @user = User.get_user_info(current_user.id)
+    @follows = Follow.get_follow_count(current_user.id)
+    @followee  = Follow.get_followee_count(current_user.id)
 
     # ログイン中ユーザが登録しているmark_restaurantのrestaurant情報を取得
-    mark_restaurants = MarkRestaurant.where(user_id: current_user.id)
-    @restaurants = []
+    @restaurants = MarkRestaurant.get_mark_restaurant_info(current_user.id)
+    @restaurants = Kaminari.paginate_array(@restaurants).page(params[:page])
 
-    # mark_restaurantのrestaurant情報を取得し配列に格納
-    mark_restaurants.each do |mark_restaurant|
-      restaurant = Restaurant.new
-      restaurant = mark_restaurant.restaurant
-      restaurant.mark_restaurant_user_reg = true
-      Restaurant.set_went_restaurant_user_reg(restaurant)
-      @restaurants << restaurant
-    end
   end
 
   def index

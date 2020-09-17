@@ -38,10 +38,9 @@ class Restaurant < ApplicationRecord
       restaurant.access_note = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS_NOTE]
       restaurant.budget = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_BUDGET]
 
-      set_mark_restaurant_user_reg(restaurant)
-      set_went_restaurant_user_reg(restaurant)
       restaurants << restaurant
     end
+    set_accessor(restaurants)
     restaurants
   end
 
@@ -67,38 +66,12 @@ class Restaurant < ApplicationRecord
     restaurant.access_walk = params[:access_walk]
     restaurant.access_note = params[:access_note]
     restaurant.budget = params[:budget]
-    set_mark_restaurant_user_reg(restaurant)
-    set_went_restaurant_user_reg(restaurant)
+
+    set_accessor(restaurant)
     restaurant
   end
 
   private
-
-  # [概　要] Restaurantオブジェクトのmark_restaurant_user_regをセットする
-  # [引　数] Restaurantオブジェクト
-  # [戻り値] Restaurantオブジェクト
-  # [説　明] 引数のRestaurantオブジェクト情報のMarkRestaurantテーブルに登録有無を返す
-  def self.set_mark_restaurant_user_reg(restaurant)
-    # MarkRestaurantテーブルの登録有無をrestaurantインスタンスに格納する
-    if MarkRestaurant.exists?(gurunavi_id: restaurant.gurunavi_id)
-      restaurant.mark_restaurant_user_reg = true
-    else
-      restaurant.mark_restaurant_user_reg = false     
-    end
-  end
-
-  # [概　要] Restaurantオブジェクトのwent_restaurant_user_regをセットする
-  # [引　数] Restaurantオブジェクト
-  # [戻り値] Restaurantオブジェクト
-  # [説　明] 引数のRestaurantオブジェクト情報のWentRestaurantテーブルに登録有無を返す
-  def self.set_went_restaurant_user_reg(restaurant)
-    # WentRestaurantテーブルの登録有無をrestaurantインスタンスに格納する
-    if WentRestaurant.exists?(gurunavi_id: restaurant.gurunavi_id)
-      restaurant.went_restaurant_user_reg = true
-    else
-      restaurant.went_restaurant_user_reg = false     
-    end
-  end
 
   # [概　要] Restaurantオブジェクトのaccessorに値を代入する
   # [引　数] Restaurantオブジェクト(配列 or 単体)
@@ -124,24 +97,28 @@ class Restaurant < ApplicationRecord
   # [概　要] set_accessorの作業用メソッド Restaurantオブジェクトのaccessorに値を代入する(modelからの値取得処理)
   # [引　数] Restaurantオブジェクト
   # [戻り値] Restaurantオブジェクト
-  # [説　明] Restaurantオブジェクトのscoreにmark_restaurantのscore平均をセットする
+  # [説　明] Restaurantオブジェクトのaccerssorに値をセットする
   def self.set_accessor_get_model_value(restaurant)
+
     # restaurantのgurunavi_idがMarkRestaurantテーブルに登録有無されているかどうか
     if MarkRestaurant.exists?(gurunavi_id: restaurant.gurunavi_id)
+      restaurant.mark_restaurant_user_reg = true
       restaurant.score = MarkRestaurant.where(gurunavi_id: restaurant.gurunavi_id).average(:score)
       restaurant.mark_restaurant_count = MarkRestaurant.where(gurunavi_id: restaurant.gurunavi_id).count(:gurunavi_id)
     else
+      restaurant.mark_restaurant_user_reg = false
       restaurant.score = RESTAURANT_ACCER_ZERO
       restaurant.mark_restaurant_count = RESTAURANT_ACCER_ZERO
     end
 
     # restaurantのgurunavi_idがWentRestaurantテーブルに登録有無されているかどうか
     if WentRestaurant.exists?(gurunavi_id: restaurant.gurunavi_id)
+      restaurant.went_restaurant_user_reg = true
       restaurant.went_restaurant_count = WentRestaurant.where(gurunavi_id: restaurant.gurunavi_id).count(:gurunavi_id)
     else
+      restaurant.went_restaurant_user_reg = false 
       restaurant.went_restaurant_count = RESTAURANT_ACCER_ZERO
     end
-
     restaurant
   end
 end
