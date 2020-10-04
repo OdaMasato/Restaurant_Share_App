@@ -5,12 +5,18 @@ class User < ApplicationRecord
   # ☆開発用に一時コメントアウト
   # , :confirmable
 
+  # アソシエーション
   has_many :MarkRestaurant,foreign_key: 'user_id'
   has_many :Restaurant, through: :MarkRestaurant
 
   has_many :WentRestaurant,foreign_key: 'user_id'
   has_many :Restaurant, through: :WentRestaurant
-  has_many :Follow
+  has_many :Follow,foreign_key: 'user_id'
+
+  mount_uploader :image, ImageUploader
+
+  # accessor
+  attr_accessor :followings_count ,:followers_count, :is_current_user_following
 
   # [概　要] ユーザ情報を取得
   # [引　数] User::user_id

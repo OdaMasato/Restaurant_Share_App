@@ -43,7 +43,6 @@ ActiveRecord::Schema.define(version: 2020_09_12_121844) do
     t.string "gurunavi_url"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "total_hit_count"
     t.string "access_line"
     t.string "access_station"
     t.string "access_station_exit"

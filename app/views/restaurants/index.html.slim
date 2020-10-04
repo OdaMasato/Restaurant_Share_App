@@ -18,6 +18,6 @@
   - @restaurants.each do |restaurant|
     / 店舗情報表示
     .container
-      = render partial: 'restaurants/restaurant_list', locals: {restaurant: restaurant}
+      = render partial: 'restaurant_list', locals: {restaurant: restaurant}
 
 = paginate @restaurants

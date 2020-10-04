@@ -17,7 +17,7 @@ class MarkRestaurantsController < ApplicationController
     mark_restaurant = MarkRestaurant.new
     mark_restaurant.user_id = current_user.id
     mark_restaurant.gurunavi_id = restaurant.gurunavi_id
-    mark_restaurant.score = params.require(:score)
+    mark_restaurant.score = params.require(:score_avg)
 
     # ☆エラー処理するのが望ましい
     mark_restaurant.save!

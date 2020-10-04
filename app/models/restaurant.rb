@@ -1,19 +1,19 @@
 class Restaurant < ApplicationRecord
 
-  # 定数
-  RESTAURANT_ACCER_ZERO = 0
-
   # アソシエーション
   has_many :MarkRestaurant,primary_key: 'gurunavi_id', foreign_key: 'gurunavi_id'
   has_many :WentRestaurant,primary_key: 'gurunavi_id', foreign_key: 'gurunavi_id'
   has_many :User, through: :MarkRestaurant
 
+  # 定数
+  RESTAURANT_ACCER_ZERO = 0
+
   # accessor
-  attr_accessor :mark_restaurant_user_reg, :went_restaurant_user_reg, :score, :mark_restaurant_count, :went_restaurant_count
+  attr_accessor :mark_restaurant_user_reg, :went_restaurant_user_reg, :score_avg, :score, :mark_restaurant_count, :went_restaurant_count
 
   # [概　要] ぐるなびのレストラン検索APIのレスポンスパラメータからrestaurant配列を取得
   # [引　数] ぐるなび レストラン検索APIレスポンスパラメータ(json)
-  # [戻り値] 正常完了:restaurant[] / 正常完了以外:nil
+  # [戻り値] Restaurant配列
   # [説　明] 引数のパラメータより飲食店情報を取得し、restaurant配列として返す
   def self.get_gurunavi_params_restaurants_arg(params)
     restaurants = []
@@ -40,13 +40,12 @@ class Restaurant < ApplicationRecord
 
       restaurants << restaurant
     end
-    set_accessor(restaurants)
     restaurants
   end
 
   # [概　要] Restaurantオブジェクトのハッシュパラメータからrestaurantインスタンスを取得
   # [引　数] Restaurantオブジェクトのハッシュパラメータ
-  # [戻り値] 正常完了:restaurant / 正常完了以外:nil
+  # [戻り値] Restaurant配列
   # [説　明] 引数のパラメータよりrestaurant情報を取得し、restaurantインスタンスを返す
   def self.get_param_restaurant(params)
     restaurant = Restaurant.new
@@ -67,51 +66,58 @@ class Restaurant < ApplicationRecord
     restaurant.access_note = params[:access_note]
     restaurant.budget = params[:budget]
 
-    set_accessor(restaurant)
     restaurant
   end
 
   private
 
   # [概　要] Restaurantオブジェクトのaccessorに値を代入する
-  # [引　数] Restaurantオブジェクト(配列 or 単体)
-  # [戻り値] Restaurantオブジェクト
+  # [引　数] Restaurantオブジェクト(配列 or 単体), ユーザID
+  # [戻り値] Restaurant配列
   # [説　明] Restaurantオブジェクトのscoreにmark_restaurantのscore平均をセットする
-  def self.set_accessor(restaurant_org)
+  def self.set_accessor(restaurant_org, user_id)
 
     if Array == restaurant_org.class 
       # 引数が配列型の場合
       restaurants = []
       restaurant_org.each do |restaurant|
-        restaurant = set_accessor_get_model_value(restaurant)
+        restaurant = set_accessor_get_model_value(restaurant, user_id)
         restaurants << restaurant
       end
       restaurants
     else
       # 上記以外の場合
-      restaurant = set_accessor_get_model_value(restaurant_org)
+      restaurant = set_accessor_get_model_value(restaurant_org, user_id)
       restaurant
     end
   end
 
   # [概　要] set_accessorの作業用メソッド Restaurantオブジェクトのaccessorに値を代入する(modelからの値取得処理)
-  # [引　数] Restaurantオブジェクト
+  # [引　数] Restaurantオブジェクト,ユーザID
   # [戻り値] Restaurantオブジェクト
   # [説　明] Restaurantオブジェクトのaccerssorに値をセットする
-  def self.set_accessor_get_model_value(restaurant)
+  def self.set_accessor_get_model_value(restaurant, user_id)
 
     # restaurantのgurunavi_idがMarkRestaurantテーブルに登録有無されているかどうか
     if MarkRestaurant.exists?(gurunavi_id: restaurant.gurunavi_id)
+      restaurant.score_avg = MarkRestaurant.where(gurunavi_id: restaurant.gurunavi_id).average(:score)
+      restaurant.mark_restaurant_count = MarkRestaurant.where(gurunavi_id: restaurant.gurunavi_id).count(:gurunavi_id)  
+    else
+      restaurant.score_avg = RESTAURANT_ACCER_ZERO
+      restaurant.mark_restaurant_count = RESTAURANT_ACCER_ZERO
+    end
+    
+    # ユーザがmark_restaurantにgurunavi_idを登録しているかどうか
+    if MarkRestaurant.exists?(user_id: user_id, gurunavi_id: restaurant.gurunavi_id)
       restaurant.mark_restaurant_user_reg = true
-      restaurant.score = MarkRestaurant.where(gurunavi_id: restaurant.gurunavi_id).average(:score)
-      restaurant.mark_restaurant_count = MarkRestaurant.where(gurunavi_id: restaurant.gurunavi_id).count(:gurunavi_id)
+      restaurant.score = MarkRestaurant.find_by(user_id: user_id, gurunavi_id: restaurant.gurunavi_id).score
     else
       restaurant.mark_restaurant_user_reg = false
       restaurant.score = RESTAURANT_ACCER_ZERO
       restaurant.mark_restaurant_count = RESTAURANT_ACCER_ZERO
     end
 
-    # restaurantのgurunavi_idがWentRestaurantテーブルに登録有無されているかどうか
+    # ユーザがwent_restaurantにgurunavi_idを登録しているかどうか
     if WentRestaurant.exists?(gurunavi_id: restaurant.gurunavi_id)
       restaurant.went_restaurant_user_reg = true
       restaurant.went_restaurant_count = WentRestaurant.where(gurunavi_id: restaurant.gurunavi_id).count(:gurunavi_id)

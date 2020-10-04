@@ -1,21 +1,42 @@
 class UsersController < ApplicationController
+
   def show
     # ログイン中ユーザのuser情報を取得
     @user = User.get_user_info(current_user.id)
-    @follows = Follow.get_follow_count(current_user.id)
-    @followee  = Follow.get_followee_count(current_user.id)
+
+    # フォロー中のユーザ情報を取得
+    @followings = Follow.get_follows_info(current_user.id, Follow::GET_FOLLOWS_INFO_TYPE_FOLLOWINGS)
+    @followings = Kaminari.paginate_array(@followings).page(params[:page])
+
+    # フォローされているユーザ情報を取得
+    @followers  = Follow.get_follows_info(current_user.id, Follow::GET_FOLLOWS_INFO_TYPE_FOLLOWERS)
+    @followers = Kaminari.paginate_array(@followers).page(params[:page])
 
     # ログイン中ユーザが登録しているmark_restaurantのrestaurant情報を取得
-    @restaurants = MarkRestaurant.get_mark_restaurant_info(current_user.id)
-    @restaurants = Kaminari.paginate_array(@restaurants).page(params[:page])
+    @mark_restaurants = MarkRestaurant.get_mark_restaurant_info(current_user.id)
+    @mark_restaurants = Kaminari.paginate_array(@mark_restaurants).page(params[:page])
 
+    # ログイン中ユーザが登録しているwent_restaurantのrestaurant情報を取得
+    @went_restaurants = WentRestaurant.get_went_restaurant_info(current_user.id)
+    @went_restaurants = Kaminari.paginate_array(@went_restaurants).page(params[:page])
+
+    @disp = params[:disp]
+  
   end
 
   def index
-    if !(params[:search].nil?)
-      @users = User.where('account_name LIKE ?', "%#{params[:search]}%")
+    if params[:search].nil?
+      @users = User.where.not(id: current_user)
     else
-      # nop
+      @users = User.where('account_name LIKE ?', "%#{params[:search]}%").where.not(id: current_user)
     end
+    
+    @users = Follow.get_follows_info(current_user.id, Follow::GET_FOLLOWS_INFO_TYPE_FOLLOWINGS, @users)
+    @users = Kaminari.paginate_array(@users).page(params[:page])
+
+  end
+
+  def edit
+    # nop
   end
 end

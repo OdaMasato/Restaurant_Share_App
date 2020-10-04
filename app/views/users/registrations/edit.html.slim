@@ -32,6 +32,8 @@ h2
       | (we need your current password to confirm your changes)
     br
     = f.password_field :current_password, autocomplete: "current-password"
+  .field
+    = f.file_field :image
   .actions
     = f.submit "Update"
 h3

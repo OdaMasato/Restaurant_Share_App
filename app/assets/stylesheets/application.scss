@@ -24,7 +24,7 @@
 }
 
 .score_icon {
-  color:darkorange;
+  color:rgb(250, 200, 33);
   font-size: 20px; 
 }
 
@@ -165,14 +165,74 @@
   text-decoration: none;
 }
 
-.user_info_basic_btn.mark_restaurant-normal-border:hover {
+.user_info_basic_btn.selected-border {
+  color: white;
+  background: gray;
+  border: solid 2px none;
+  vertical-align: middle;
+  font-size: 16px; 
+  width: 100px;
+  height:  75px;
+  text-align: center;
+  display: inline-block;
+  padding: 0.3em;
+  text-decoration: none;
+  transition: .4s;
+}
+
+.user_info_basic_btn.mark_went_restaurant-normal-border:hover {
   background: darkorange;
   color: white;
   border: solid 2px none;
 }
 
-.user_info_basic_btn.mark_restaurant-selected-border {
+.user_info_basic_btn.mark_went_restaurant-selected-border {
   background: darkorange;
   color: white;
   border: solid 2px none;
+}
+
+.mark_restaurant_index_body_pr_text {
+  font-size: 12px; 
+  display: inline;
+  text-decoration: underline;
+  font-style: oblique;
+  list-style: none;
+  color: #343a40;
+}
+
+.follow_info_text{
+  text-align: center;
+}
+
+.follow_btn {
+  border: solid 2px gray;
+  width: 100px;
+  font-size: 14px; 
+  text-align: center;
+  display: inline-block;
+  padding: 0.3em;
+  margin-top: 5px;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: .4s;
+}
+.follow_btn.following {
+  color: white;
+  background: gray;
+}
+
+.follow_btn.following:hover {
+  color: gray;
+  background: white;
+}
+
+.follow_btn.followers {
+  color: gray;
+  background: white;
+}
+
+.follow_btn.followers:hover {
+  color: white;
+  background: gray;
 }

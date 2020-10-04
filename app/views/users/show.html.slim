@@ -1,51 +1,88 @@
-| ※現在メンテナンス中
-
 .container
-  .row.bg-light.text-dark.border-bottom
-    .col-md-3
-      img height="30" src="/assets/gurutomo_logo.jpeg" width="150" alt="ぐるとも！"
-        
-    .col-md-6
+  .row.bg-light.text-dark.border-bottom.pt-3.pb-3.ml-1
+    .col-md-2.pl-3
+      - if @user.image.file.nil?
+        img src="/assets/user_image_default.jpeg" height="150" width="150" alt="no image"
+      - else
+        = image_tag(@user.image.to_s, size: 150)
+
+    .col-md-7
       .user_name = @user.account_name
       .user_id = "@#{@user.account_id}"
 
     .col-md-3
-      = link_to 'プロフィール編集', users_show_path, class: 'user_setting_btn'
+      = link_to 'プロフィール編集', edit_user_registration_path, class: 'user_setting_btn'
 
-  .row.bg-light.text-dark.border-bottom
+  .row.bg-light.text-dark.border-bottom.ml-1
     .col-md-12
-    = link_to follows_index_path('folllow'), class: 'user_info_basic_btn mark_restaurant-selected-border', method: :post
-      i.fas.fa-bookmark 
-      br
-        = "#{@follows}"
+    - if "mark_restaurant_list" == @disp || nil == @disp
+      - @disp = "mark_restaurant_list"
+      / mark_restaurant表示ボタンを選択表示
+      = link_to users_show_path(disp: 'mark_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-selected-border', method: :get
+        i.fas.fa-bookmark 
+        br
+          = "#{@mark_restaurants.count}"
+    - else
+      / mark_restaurant表示ボタンを通常表示
+      = link_to users_show_path(disp: 'mark_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-normal-border', method: :get
+        i.fas.fa-bookmark 
+        br
+          = "#{@mark_restaurants.count}"
 
-    = link_to follows_index_path('folllow'), class: 'user_info_basic_btn mark_restaurant-normal-border', method: :get
-      i.fas.fa-eye
-      br
-        = "#{@follows}"
+    - if "went_restaurant_list" == @disp
+      / went_restaurant表示ボタンを選択表示
+      = link_to users_show_path(disp: 'went_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-selected-border', method: :get
+        i.fas.fa-eye
+        br
+          = "#{@went_restaurants.count}"
+    - else
+      / went_restaurant表示ボタンを通常表示
+      = link_to users_show_path(disp: 'went_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-normal-border', method: :get
+        i.fas.fa-eye
+        br
+          = "#{@went_restaurants.count}"
 
-    = link_to follows_index_path('folllow'), class: 'user_info_basic_btn', method: :post
-      | Following
-      br
-        = "#{@follows}"
+    - if "show_following_list" == @disp
+      / following表示ボタンを選択表示
+      = link_to users_show_path(disp: 'show_following_list'), class: 'user_info_basic_btn selected-border', method: :get
+        | Following
+        br
+          = "#{@followings.count}"
+    - else
+      / following表示ボタンを通常表示
+      = link_to users_show_path(disp: 'show_following_list'), class: 'user_info_basic_btn normal-border', method: :get
+        | Following
+        br
+          = "#{@followings.count}"
 
-    = link_to follows_index_path('folllow'), class: 'user_info_basic_btn', method: :post
-      | Followers
-      br
-        = "#{@follows}"
+    - if "show_followers_list" == @disp
+      / followers表示ボタン
+      = link_to users_show_path(disp: 'show_followers_list'), class: 'user_info_basic_btn selected-border', method: :get
+        | Followers
+        br
+          = "#{@followers.count}"
+    - else
+      / followers表示ボタン
+      = link_to users_show_path(disp: 'show_followers_list'), class: 'user_info_basic_btn normal-border', method: :get
+        | Followers
+        br
+          = "#{@followers.count}"
 
-- if @restaurants
-  - col_count = 1
-  - @restaurants.each do |restaurant|
-      - if 1 == (col_count % 2) 
-        / 行に対して1件目の店舗情報を表示する場合
-        .container
-          .row
-
-      .col-md-6.my-2
-        = render partial: 'restaurants/restaurant_list', locals: {restaurant: restaurant}
-
-      - col_count+=1
-
-
-= paginate @restaurants
+  - if "mark_restaurant_list" == @disp
+    / mark_restaurantリストを表示
+    = render partial: 'show_restaurant_list', locals: {restaurants: @mark_restaurants, disp: @disp}
+    = paginate @mark_restaurants
+  - elsif "went_restaurant_list" == @disp
+    / went_restaurantリストを表示
+    = render partial: 'show_restaurant_list', locals: {restaurants: @went_restaurants, disp: @disp}
+    = paginate @went_restaurants
+  - elsif "show_following_list" == @disp
+    / followingリストを表示
+    = render partial: 'show_follow_user_list', locals: {follows: @followings}
+    = paginate @followings
+  - elsif "show_followers_list" == @disp
+    / followersリストを表示
+    = render partial: 'show_follow_user_list', locals: {follows: @followers}
+    = paginate @followers
+  - else
+    / nop

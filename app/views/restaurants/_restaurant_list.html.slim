@@ -6,7 +6,7 @@
 
     / 評価平均
     .score_icon
-      - score_tmp = restaurant.score
+      - score_tmp = restaurant.score_avg
       - for i in (1..5) do
         - if (0 < score_tmp)
           - if (1 <= score_tmp)
@@ -16,7 +16,7 @@
         - else
           i.far.fa-star
         - score_tmp-=1
-      .score_text = " #{restaurant.score}"
+      .score_text = " #{restaurant.score_avg}"
 
 / 店舗情報body
 .row.bg-white.text-dark.py-4.mb-4.mr-1

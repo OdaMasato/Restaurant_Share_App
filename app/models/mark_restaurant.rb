@@ -1,4 +1,6 @@
 class MarkRestaurant < ApplicationRecord
+
+  # アソシエーション
   belongs_to :user
   belongs_to :restaurant,primary_key: 'gurunavi_id',  foreign_key: 'gurunavi_id'
 
@@ -15,7 +17,7 @@ class MarkRestaurant < ApplicationRecord
     mark_restaurants.each do |mark_restaurant|
       restaurant = Restaurant.new
       restaurant = mark_restaurant.restaurant
-      restaurant = Restaurant.set_accessor(restaurant)
+      restaurant = Restaurant.set_accessor(restaurant, user_id)
       restaurants << restaurant
     end
     restaurants

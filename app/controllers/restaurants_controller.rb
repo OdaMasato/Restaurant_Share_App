@@ -12,6 +12,7 @@ class RestaurantsController < ApplicationController
       # 取得成功の場合
       # レスポンスからRestaurant情報を取得
       @restaurants = Restaurant.get_gurunavi_params_restaurants_arg(results)
+      @restaurants = Restaurant.set_accessor(@restaurants, current_user.id)
       @restaurants = Kaminari.paginate_array(@restaurants).page(params[:page])
       @total_hit_count = results[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_HIT_COUNT]
     else
@@ -22,5 +23,6 @@ class RestaurantsController < ApplicationController
 
   def show
     @restaurant = Restaurant.get_param_restaurant(params)
+    @restaurant = Restaurant.set_accessor(@restaurant, current_user.id)
   end
 end

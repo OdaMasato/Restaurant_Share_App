@@ -19,11 +19,7 @@ Rails.application.routes.draw do
   post 'went_restaurants/create'
   post 'went_restaurants/destroy'
 
-
-  # 開発用コード
-  root to: 'restaurants#index'
-  # 本番コード
-  # root to: 'pages#home'
+  root to: 'pages#home'
 
   # ログイン、アカウント編集後、任意のページに推移させるための記述
   devise_for :users, controllers: {

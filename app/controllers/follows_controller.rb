@@ -24,7 +24,7 @@ class FollowsController < ApplicationController
 
     # ☆エラー処理するのが望ましい
     follow.save!
-    redirect_to users_index_path
+    redirect_back(fallback_location: root_path)
   end
 
   def show
@@ -51,6 +51,6 @@ class FollowsController < ApplicationController
     follow = Follow.find_by(user_id: user_id, follow_id: follow_id)
     follow.destroy!
 
-    redirect_to users_index_path
+    redirect_back(fallback_location: root_path)
   end
 end

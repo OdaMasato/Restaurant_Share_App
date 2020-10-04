@@ -76,3 +76,7 @@ gem 'kaminari'
 
 # font-awesome-sassを導入する
 gem 'font-awesome-sass'
+
+# carrierを導入する
+gem 'carrierwave'
+gem 'carrierwave-aws'
