@@ -5,9 +5,11 @@
         div class="row bg-light text-dark pt-3 pb-4 ml-1"
           .col-md-3.pl-3
             - if follow.image.file.nil?
-              img src="/assets/user_image_default.jpeg" height="75" width="75" alt="no image"
+              = link_to users_show_path(user: follow.attributes, disp: 'mark_restaurant_list')
+                img src="/assets/user_image_default.jpeg" height="75" width="75" alt="no image"
             - else
-              = image_tag(follow.image.to_s, size: 75)
+              = link_to users_show_path(user: follow.attributes, disp: 'mark_restaurant_list')
+                = image_tag(follow.image.to_s, size: 75)
 
           .col-md-9
             .user_name = follow.account_name
@@ -26,9 +28,12 @@
 
           .col-md-4
             - if true == follow.is_current_user_following
-              = link_to follows_destroy_path(follow.attributes), class: 'follow_btn following', method: :post
-                i.fas.fa-user-check 
-                | フォロー中
+              - if current_user.id != follow.id
+                = link_to follows_destroy_path(follow.attributes), class: 'follow_btn following', method: :post
+                  i.fas.fa-user-check 
+                  | フォロー中
+              - else
+                / 何も表示しない
             - else
               = link_to follows_create_path(follow.attributes), class: 'follow_btn followers', method: :post
                 i.fas.fa-user-plus

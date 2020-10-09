@@ -1,23 +1,27 @@
 class UsersController < ApplicationController
 
   def show
-    # ログイン中ユーザのuser情報を取得
-    @user = User.get_user_info(current_user.id)
+    # 表示するユーザ情報を取得
+    if params[:user].nil?
+      @user = User.get_user_info(current_user.id)
+    else
+      @user = User.get_user_info(params[:user][:id])
+    end
 
     # フォロー中のユーザ情報を取得
-    @followings = Follow.get_follows_info(current_user.id, Follow::GET_FOLLOWS_INFO_TYPE_FOLLOWINGS)
+    @followings = Follow.get_follows_info(@user.id, Follow::GET_FOLLOWS_INFO_TYPE_FOLLOWINGS)
     @followings = Kaminari.paginate_array(@followings).page(params[:page])
 
     # フォローされているユーザ情報を取得
-    @followers  = Follow.get_follows_info(current_user.id, Follow::GET_FOLLOWS_INFO_TYPE_FOLLOWERS)
+    @followers  = Follow.get_follows_info(@user.id, Follow::GET_FOLLOWS_INFO_TYPE_FOLLOWERS)
     @followers = Kaminari.paginate_array(@followers).page(params[:page])
 
     # ログイン中ユーザが登録しているmark_restaurantのrestaurant情報を取得
-    @mark_restaurants = MarkRestaurant.get_mark_restaurant_info(current_user.id)
+    @mark_restaurants = MarkRestaurant.get_mark_restaurant_info(@user.id, current_user.id)
     @mark_restaurants = Kaminari.paginate_array(@mark_restaurants).page(params[:page])
 
     # ログイン中ユーザが登録しているwent_restaurantのrestaurant情報を取得
-    @went_restaurants = WentRestaurant.get_went_restaurant_info(current_user.id)
+    @went_restaurants = WentRestaurant.get_went_restaurant_info(@user.id, current_user.id)
     @went_restaurants = Kaminari.paginate_array(@went_restaurants).page(params[:page])
 
     @disp = params[:disp]

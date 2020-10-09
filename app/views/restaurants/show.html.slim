@@ -67,7 +67,7 @@
       .row
         .col-md-12
           / 行ったお店ボタン
-          - if @restaurant.mark_restaurant_user_reg
+          - if @restaurant.mark_restaurant_current_user_reg
             = link_to mark_restaurants_destroy_path(@restaurant.attributes), class: 'mark_went_restaurant_btn selected-border', method: :post
               i.fas.fa-bookmark = " #{@restaurant.mark_restaurant_count}"
             
@@ -76,7 +76,7 @@
               i.fas.fa-bookmark = " #{@restaurant.mark_restaurant_count}"
 
           / 行きたいお店ボタン
-          - if @restaurant.went_restaurant_user_reg
+          - if @restaurant.went_restaurant_current_user_reg
             = link_to went_restaurants_destroy_path(@restaurant.attributes), class: 'mark_went_restaurant_btn normal-border', method: :post
               i.fas.fa-eye = " #{@restaurant.went_restaurant_count}"
           - else

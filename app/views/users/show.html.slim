@@ -18,52 +18,52 @@
     - if "mark_restaurant_list" == @disp || nil == @disp
       - @disp = "mark_restaurant_list"
       / mark_restaurant表示ボタンを選択表示
-      = link_to users_show_path(disp: 'mark_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-selected-border', method: :get
+      = link_to users_show_path(user: @user.attributes, disp: 'mark_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-selected-border', method: :get
         i.fas.fa-bookmark 
         br
           = "#{@mark_restaurants.count}"
     - else
       / mark_restaurant表示ボタンを通常表示
-      = link_to users_show_path(disp: 'mark_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-normal-border', method: :get
+      = link_to users_show_path(user: @user.attributes, disp: 'mark_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-normal-border', method: :get
         i.fas.fa-bookmark 
         br
           = "#{@mark_restaurants.count}"
 
     - if "went_restaurant_list" == @disp
       / went_restaurant表示ボタンを選択表示
-      = link_to users_show_path(disp: 'went_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-selected-border', method: :get
+      = link_to users_show_path(user: @user.attributes, disp: 'went_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-selected-border', method: :get
         i.fas.fa-eye
         br
           = "#{@went_restaurants.count}"
     - else
       / went_restaurant表示ボタンを通常表示
-      = link_to users_show_path(disp: 'went_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-normal-border', method: :get
+      = link_to users_show_path(user: @user.attributes, disp: 'went_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-normal-border', method: :get
         i.fas.fa-eye
         br
           = "#{@went_restaurants.count}"
 
     - if "show_following_list" == @disp
       / following表示ボタンを選択表示
-      = link_to users_show_path(disp: 'show_following_list'), class: 'user_info_basic_btn selected-border', method: :get
+      = link_to users_show_path(user: @user.attributes, disp: 'show_following_list'), class: 'user_info_basic_btn selected-border', method: :get
         | Following
         br
           = "#{@followings.count}"
     - else
       / following表示ボタンを通常表示
-      = link_to users_show_path(disp: 'show_following_list'), class: 'user_info_basic_btn normal-border', method: :get
+      = link_to users_show_path(user: @user.attributes, disp: 'show_following_list'), class: 'user_info_basic_btn normal-border', method: :get
         | Following
         br
           = "#{@followings.count}"
 
     - if "show_followers_list" == @disp
       / followers表示ボタン
-      = link_to users_show_path(disp: 'show_followers_list'), class: 'user_info_basic_btn selected-border', method: :get
+      = link_to users_show_path(user: @user.attributes, disp: 'show_followers_list'), class: 'user_info_basic_btn selected-border', method: :get
         | Followers
         br
           = "#{@followers.count}"
     - else
       / followers表示ボタン
-      = link_to users_show_path(disp: 'show_followers_list'), class: 'user_info_basic_btn normal-border', method: :get
+      = link_to users_show_path(user: @user.attributes, disp: 'show_followers_list'), class: 'user_info_basic_btn normal-border', method: :get
         | Followers
         br
           = "#{@followers.count}"
