@@ -47,26 +47,26 @@
       = link_to users_show_path(user: @user.attributes, disp: 'show_following_list'), class: 'user_info_basic_btn selected-border', method: :get
         | Following
         br
-          = "#{@followings.count}"
+          = "#{@user.followings_count}"
     - else
       / following表示ボタンを通常表示
       = link_to users_show_path(user: @user.attributes, disp: 'show_following_list'), class: 'user_info_basic_btn normal-border', method: :get
         | Following
         br
-          = "#{@followings.count}"
+          = "#{@user.followings_count}"
 
     - if "show_followers_list" == @disp
-      / followers表示ボタン
+      / followers表示ボタンを選択表示
       = link_to users_show_path(user: @user.attributes, disp: 'show_followers_list'), class: 'user_info_basic_btn selected-border', method: :get
         | Followers
         br
-          = "#{@followers.count}"
+          = "#{@user.followers_count}"
     - else
-      / followers表示ボタン
+      / followers表示ボタンを通常表示
       = link_to users_show_path(user: @user.attributes, disp: 'show_followers_list'), class: 'user_info_basic_btn normal-border', method: :get
         | Followers
         br
-          = "#{@followers.count}"
+          = "#{@user.followers_count}"
 
   - if "mark_restaurant_list" == @disp
     / mark_restaurantリストを表示
@@ -78,11 +78,11 @@
     = paginate @went_restaurants
   - elsif "show_following_list" == @disp
     / followingリストを表示
-    = render partial: 'show_follow_user_list', locals: {follows: @followings}
+    = render partial: 'show_follow_user_list', locals: {follows: @followings, disp: @disp}
     = paginate @followings
   - elsif "show_followers_list" == @disp
     / followersリストを表示
-    = render partial: 'show_follow_user_list', locals: {follows: @followers}
+    = render partial: 'show_follow_user_list', locals: {follows: @followers, disp: @disp}
     = paginate @followers
   - else
     / nop

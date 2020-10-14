@@ -27,14 +27,23 @@
               = "#{follow.followers_count}"
 
           .col-md-4
-            - if true == follow.is_current_user_following
-              - if current_user.id != follow.id
-                = link_to follows_destroy_path(follow.attributes), class: 'follow_btn following', method: :post
-                  i.fas.fa-user-check 
-                  | フォロー中
-              - else
-                / 何も表示しない
-            - else
-              = link_to follows_create_path(follow.attributes), class: 'follow_btn followers', method: :post
+            - if -1 == follow.is_current_user_following
+              /nop 
+            - elsif 0 == follow.is_current_user_following
+              = link_to follows_create_path(follow.attributes), class: 'follow_btn following', method: :post
+                i.fas.fa-user-check 
+                | 友達になる
+            - elsif 1 == follow.is_current_user_following
+              = link_to follows_destroy_path(follow.attributes), class: 'follow_btn following', method: :post
+                i.fas.fa-user-check 
+                | 友達
+            - elsif 2 == follow.is_current_user_following
+              = link_to follows_destroy_path(follow.attributes), class: 'follow_btn followers', method: :post
                 i.fas.fa-user-plus
-                | フォロー
+                | 友達リクエスト中
+            - elsif 3 == follow.is_current_user_following
+              = link_to follows_update_path(follow.attributes), class: 'follow_btn followers', method: :post
+                i.fas.fa-user-plus
+                | 承認
+            - else
+              / nop

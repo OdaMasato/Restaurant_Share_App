@@ -18,12 +18,21 @@ class FollowsController < ApplicationController
     # パラメータからフォロー対象のユーザーIDを取得
     follow_user_id = params[:id]
 
-    follow = Follow.new()
-    follow.user_id = current_user.id
-    follow.follow_id = follow_user_id
+    follow_me = Follow.new()
+    follow_me.user_id = current_user.id
+    follow_me.follow_id = follow_user_id
+    follow_me.follow_status = Follow::FOLLOW_STATUS_TYPE_REQUEST
+    # ☆エラー処理するのが望ましい
+    follow_me.save!
+
+    follow_you = Follow.new()
+    follow_you.user_id = follow_user_id
+    follow_you.follow_id = current_user.id
+    follow_you.follow_status = Follow::FOLLOW_STATUS_TYPE_REQUEST_TO_YOU
 
     # ☆エラー処理するのが望ましい
-    follow.save!
+    follow_you.save!
+
     redirect_back(fallback_location: root_path)
   end
 
@@ -42,14 +51,31 @@ class FollowsController < ApplicationController
     end
   end
 
+  def update
+
+    user_id = current_user.id
+    follow_id = params[:id]
+
+    follow_me = Follow.find_by(user_id: user_id, follow_id: follow_id)
+    follow_me.update(follow_status: Follow::FOLLOW_STATUS_TYPE_FOLLOWING)
+
+    follow_you =  Follow.find_by(user_id: follow_id, follow_id: user_id)
+    follow_you.update(follow_status: Follow::FOLLOW_STATUS_TYPE_FOLLOWING)
+
+    redirect_back(fallback_location: root_path)
+
+  end
+
   def destroy
 
     user_id = current_user.id
     follow_id = params[:id]
 
-    # MarkRestaurantTableのレコード削除
-    follow = Follow.find_by(user_id: user_id, follow_id: follow_id)
-    follow.destroy!
+    follow_me = Follow.find_by(user_id: user_id, follow_id: follow_id)
+    follow_me.destroy!
+
+    follow_you = Follow.find_by(user_id: follow_id, follow_id: user_id)
+    follow_you.destroy!
 
     redirect_back(fallback_location: root_path)
   end

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   get 'follows/index'
   post 'follows/create'
+  post 'follows/update'
   post 'follows/show'
   post 'follows/destroy'
 
