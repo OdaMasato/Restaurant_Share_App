@@ -95,6 +95,6 @@ class Gurunavi
   # [戻り値] ぐるなびより提供されたアクセスキー(keyid)
   # [説　明] credentialsに登録しているぐるなびアクセスキーを取得
   def self.get_gurunavi_keyid
-    Rails.application.credentials.dig(:grunavi, :api_key)
+    Rails.application.credentials.dig(:gurunavi, :access_key)
   end
 end

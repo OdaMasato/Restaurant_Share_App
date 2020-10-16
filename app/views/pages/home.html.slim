@@ -1,17 +1,114 @@
-= stylesheet_link_tag("pages", media: 'all')
+#fh5co-main
+  aside#fh5co-hero.js-fullheight
+    .flexslider.js-fullheight
+      ul.slides
+        li style=("background-image: url(/assets/ui_templates/img_bg_1.jpg);") 
+          .overlay
+          .container-fluid
+            .row
+              .col-md-8.col-md-offset-2.text-center.js-fullheight.slider-text
+                .slider-text-inner
+                  h1
+                    | 友達の 
+                    br
+                    | "美味しかった"
+                    br
+                    | だから間違えない。
+                  h2
+                    | RECOMENDで知り合いのおすすめを知る。
+                  p
+                    a.btn.btn-primary.btn-demo.popup-vimeo href="#{new_user_registration_path}" 
+                      i.icon-monitor
+                      | 無料会員登録
+                    a.btn.btn-primary.btn-learn
+                      | ログイン
+                      i.icon-arrow-right3
+        li style=("background-image: url(/assets/ui_templates/img_bg_2.jpg);") 
+          .overlay
+          .container-fluid
+            .row
+              .col-md-8.col-md-offset-2.text-center.js-fullheight.slider-text
+                .slider-text-inner
+                  h1
+                    | 自分が
+                    br
+                    | "美味しかった"
+                    br
+                    | だから間違わせない。
+                  h2
+                    | RECOMENDはあなたのおすすめを教える。
+                  p
+                    a.btn.btn-primary.btn-demo.popup-vimeo href="https://vimeo.com/channels/staffpicks/93951774" 
+                      i.icon-monitor
+                      | Live Preview
+                    a.btn.btn-primary.btn-learn
+                      | Learn More
+                      i.icon-arrow-right3
+        li style=("background-image: url(/assets/ui_templates/img_bg_3.jpg);") 
+          .overlay
+          .container-fluid
+            .row
+              .col-md-8.col-md-offset-2.text-center.js-fullheight.slider-text
+                .slider-text-inner
+                  h1
+                    | 口コミがあふれる時代
+                    br
+                    | だからこそ。
+                  h2
+                    | RECOMENDは確実なお店選びを提供します。
+                  p
+                    a.btn.btn-primary.btn-demo.popup-vimeo href="https://vimeo.com/channels/staffpicks/93951774" 
+                      i.icon-monitor
+                      | Live Preview
+                    a.btn.btn-primary.btn-learn
+                      | Learn More
+                      i.icon-arrow-right3
+  .fh5co-narrow-content
+    h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft"  Services
+    .row
+      .col-md-6
+        .fh5co-feature.animate-box data-animate-effect="fadeInLeft" 
+          .fh5co-icon
+            i.icon-settings
+          .fh5co-text
+            h3 KNOW
+            p あなたの知り合いが訪れた飲食店を知ることができ、知り合いが"美味しかった"と評価したお店の中から、次に行くお店を選ぶことができます。
+      .col-md-6
+        .fh5co-feature.animate-box data-animate-effect="fadeInLeft" 
+          .fh5co-icon
+            i.icon-paperplane
+          .fh5co-text
+            h3 FRIEND
+            p あなたの知り合いを探して、フォローすることができます。
+      .col-md-6
+        .fh5co-feature.animate-box data-animate-effect="fadeInLeft" 
+          .fh5co-icon
+            i.icon-search4
+          .fh5co-text
+            h3 RECORD
+            p あなたが訪れた飲食店の評価を残すことができ、あなたが「また行きたい」と感じたお店を記録することができます。
+      .col-md-6
+        .fh5co-feature.animate-box data-animate-effect="fadeInLeft" 
+          .fh5co-icon
+            i.icon-paperplane
+          .fh5co-text 
+            h3 TIME LINE
+            p あなたの知り合いが記録した飲食店の情報をリアルタイムでチェックすることができます。
+  .fh5co-narrow-content
+    h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft"  POPULAR
+    .row.row-bottom-padded-md
+      - @restaurants.each do |restaurant|
+        / 店舗情報表示
+        = render partial: 'restaurants/restaurant_list', locals: {restaurant: restaurant}
 
-.row.text_main
-  .col-12
-    br
-    br
-    br
-    br
-    br
-    br
-    | 知らない誰かのおすすめより
-    br
-    | 知ってる人の「美味しかった」を見つける
-
-.row.text_sub
-  .col-12
-    | 飲食店の評価共有サービスです
+    #get-in-touch
+      .fh5co-narrow-content
+        .row
+          .col-md-4.animate-box data-animate-effect="fadeInLeft" 
+            h1.fh5co-heading-colored Let's Receive service
+        .row
+          .col-md-6.col-md-offset-3.col-md-pull-3.animate-box data-animate-effect="fadeInLeft" 
+            p.fh5co-lead 登録は1分程度で終わります。
+            p
+              a.btn.btn-primary href="#{new_user_registration_path}" 無料会員登録
+              a.btn.btn-primary.btn-learn href="#{new_user_session_path}" ログイン

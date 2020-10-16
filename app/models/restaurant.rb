@@ -75,7 +75,7 @@ class Restaurant < ApplicationRecord
   # [引　数] Restaurantオブジェクト(配列 or 単体), ユーザID
   # [戻り値] Restaurant配列
   # [説　明] Restaurantオブジェクトのscoreにmark_restaurantのscore平均をセットする
-  def self.set_accessor(restaurant_org, user_id, current_user_id = user_id)
+  def self.set_accessor(restaurant_org, user_id = nil, current_user_id = user_id)
 
     if Array == restaurant_org.class 
       # 引数が配列型の場合
@@ -98,45 +98,55 @@ class Restaurant < ApplicationRecord
   # [説　明] Restaurantオブジェクトのaccerssorに値をセットする
   def self.set_accessor_get_model_value(restaurant, user_id, current_user_id)
 
-    # restaurantのgurunavi_idがMarkRestaurantテーブルに登録有無されているかどうか
-    if MarkRestaurant.exists?(gurunavi_id: restaurant.gurunavi_id)
-      restaurant.score_avg = MarkRestaurant.where(gurunavi_id: restaurant.gurunavi_id).average(:score)
-      restaurant.mark_restaurant_count = Follow.joins(:mark_restaurant).where(user_id: current_user_id, mark_restaurants:{gurunavi_id: restaurant.gurunavi_id}).count(:gurunavi_id)
-      restaurant.mark_restaurant_count +=1 if MarkRestaurant.exists?(user_id: current_user_id, gurunavi_id: restaurant.gurunavi_id)
+    if user_id.nil?
+      # restaurantのgurunavi_idがMarkRestaurantテーブルに登録有無されているかどうか
+      if MarkRestaurant.exists?(gurunavi_id: restaurant.gurunavi_id)
+        MarkRestaurant.where(gurunavi_id: restaurant.gurunavi_id).average(:score)
+      else
+        restaurant.score_avg = RESTAURANT_ACCER_ZERO
+      end
+    else
+      # restaurantのgurunavi_idがMarkRestaurantテーブルに登録有無されているかどうか
+      restaurant.score_avg = Follow.joins(:mark_restaurant).where(user_id: current_user_id, follow_status: Follow::FOLLOW_STATUS_TYPE_FOLLOWING , mark_restaurants:{gurunavi_id: restaurant.gurunavi_id}).average(:score)
+      if !(restaurant.score_avg.nil?)
+        restaurant.score_avg = Follow.joins(:mark_restaurant).where(user_id: current_user_id, follow_status: Follow::FOLLOW_STATUS_TYPE_FOLLOWING , mark_restaurants:{gurunavi_id: restaurant.gurunavi_id}).average(:score)
+        restaurant.mark_restaurant_count = Follow.joins(:mark_restaurant).where(user_id: current_user_id, mark_restaurants:{gurunavi_id: restaurant.gurunavi_id}).count(:gurunavi_id)
+        restaurant.mark_restaurant_count +=1 if MarkRestaurant.exists?(user_id: current_user_id, gurunavi_id: restaurant.gurunavi_id)
 
-    else
-      restaurant.score_avg = RESTAURANT_ACCER_ZERO
-      restaurant.mark_restaurant_count = RESTAURANT_ACCER_ZERO
-    end
-    
-    # ユーザがmark_restaurantにgurunavi_idを登録しているかどうか
-    if MarkRestaurant.exists?(user_id: user_id, gurunavi_id: restaurant.gurunavi_id)
-      restaurant.score = MarkRestaurant.find_by(user_id: user_id, gurunavi_id: restaurant.gurunavi_id).score
-    else
-      restaurant.score = RESTAURANT_ACCER_ZERO
-      restaurant.mark_restaurant_count = RESTAURANT_ACCER_ZERO
-    end
+      else
+        restaurant.score_avg = RESTAURANT_ACCER_ZERO
+        restaurant.mark_restaurant_count = RESTAURANT_ACCER_ZERO
+      end
+      
+      # ユーザがmark_restaurantにgurunavi_idを登録しているかどうか
+      if MarkRestaurant.exists?(user_id: user_id, gurunavi_id: restaurant.gurunavi_id)
+        restaurant.score = MarkRestaurant.find_by(user_id: user_id, gurunavi_id: restaurant.gurunavi_id).score
+      else
+        restaurant.score = RESTAURANT_ACCER_ZERO
+        restaurant.mark_restaurant_count = RESTAURANT_ACCER_ZERO
+      end
 
-    # カレントユーザがmark_restaurantにgurunavi_idを登録しているかどうか
-    if MarkRestaurant.exists?(user_id: current_user_id, gurunavi_id: restaurant.gurunavi_id)
-      restaurant.mark_restaurant_current_user_reg = true
-    else
-      restaurant.mark_restaurant_current_user_reg = false
-    end
+      # カレントユーザがmark_restaurantにgurunavi_idを登録しているかどうか
+      if MarkRestaurant.exists?(user_id: current_user_id, gurunavi_id: restaurant.gurunavi_id)
+        restaurant.mark_restaurant_current_user_reg = true
+      else
+        restaurant.mark_restaurant_current_user_reg = false
+      end
 
-    # ユーザがwent_restaurantにgurunavi_idを登録しているかどうか
-    if WentRestaurant.exists?(user_id: user_id, gurunavi_id: restaurant.gurunavi_id)
-      restaurant.went_restaurant_count = Follow.joins(:went_restaurant).where(user_id: current_user_id, went_restaurants:{gurunavi_id: restaurant.gurunavi_id}).count(:gurunavi_id)
-      restaurant.went_restaurant_count +=1 if WentRestaurant.exists?(user_id: current_user_id, gurunavi_id: restaurant.gurunavi_id)
-    else
-      restaurant.went_restaurant_count = RESTAURANT_ACCER_ZERO
-    end
+      # ユーザがwent_restaurantにgurunavi_idを登録しているかどうか
+      if WentRestaurant.exists?(user_id: user_id, gurunavi_id: restaurant.gurunavi_id)
+        restaurant.went_restaurant_count = Follow.joins(:went_restaurant).where(user_id: current_user_id, went_restaurants:{gurunavi_id: restaurant.gurunavi_id}).count(:gurunavi_id)
+        restaurant.went_restaurant_count +=1 if WentRestaurant.exists?(user_id: current_user_id, gurunavi_id: restaurant.gurunavi_id)
+      else
+        restaurant.went_restaurant_count = RESTAURANT_ACCER_ZERO
+      end
 
-    # カレントユーザがwent_restaurantにgurunavi_idを登録しているかどうか
-    if WentRestaurant.exists?(user_id: current_user_id, gurunavi_id: restaurant.gurunavi_id)
-      restaurant.went_restaurant_current_user_reg = true
-    else
-      restaurant.went_restaurant_current_user_reg = false 
+      # カレントユーザがwent_restaurantにgurunavi_idを登録しているかどうか
+      if WentRestaurant.exists?(user_id: current_user_id, gurunavi_id: restaurant.gurunavi_id)
+        restaurant.went_restaurant_current_user_reg = true
+      else
+        restaurant.went_restaurant_current_user_reg = false 
+      end
     end
 
     restaurant

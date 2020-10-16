@@ -1,35 +1,105 @@
 doctype html
-html
+html.no-js
   head
-    title
-      | ぐるとも！
     = csrf_meta_tags
     = csp_meta_tag
+
+    meta charset="utf-8"
+    meta content="IE=edge" http-equiv="X-UA-Compatible"
+    title RECOMEND
+    meta content="width=device-width, initial-scale=1" name="viewport"
+    meta content="Free HTML5 Website Template by FreeHTML5.co" name="description"
+    meta content="free html5), free template, free bootstrap, free website template, html5, css3, mobile first, responsive" name="keywords"
+    meta content="FreeHTML5.co" name="author"
+
+    /!
+      | \//////////////////////////////////////////////////////
+      
+      | FREE HTML5 TEMPLATE
+      | DESIGNED &amp; DEVELOPED by FreeHTML5.co
+      
+      | Website: 		http://freehtml5.co/
+      | Email: 			info@freehtml5.co
+      | Twitter: 		http://twitter.com/fh5co
+      | Facebook: 		https://www.facebook.com/fh5co
+      
+      | \//////////////////////////////////////////////////////
+
+    /! Facebook and Twitter integration
+    meta content="" property="og:title" /
+    meta content="" property="og:image" /
+    meta content="" property="og:url" /
+    meta content="" property="og:site_name" /
+    meta content="" property="og:description" /
+    meta content="" name="twitter:title" /
+    meta content="" name="twitter:image" /
+    meta content="" name="twitter:url" /
+    meta content="" name="twitter:card" /
+
+    /! Place favicon.ico and apple-touch-icon.png in the root directory
+    link href="favicon.ico" rel=("shortcut icon") /
+    link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet" /
+    /! Animate.css
+    = stylesheet_link_tag("ui_templates/animate", media: 'all')
+    /! Icomoon Icon Fonts
+    = stylesheet_link_tag("ui_templates/icomoon", media: 'all')
+    / /! Bootstrap
+    / link href="css/bootstrap.css" rel="stylesheet" /
+    /! Flexslider
+    = stylesheet_link_tag("ui_templates/flexslider", media: 'all')
+    /! Theme style
+    = stylesheet_link_tag("ui_templates/style", media: 'all')
+
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+
+  body
+    #fh5co-page
+      a.js-fh5co-nav-toggle.fh5co-nav-toggle href="#{pages_home_path}"
+        i
+      aside#fh5co-aside.border.js-fullheight role="complementary" 
+        h1#fh5co-logo
+          a href="/"  RECOMEND
+        nav#fh5co-main-menu role="navigation" 
+          ul
+            - if current_user
+              li.fh5co-active
+                = link_to 'SEARCH', restaurants_index_path, method: :get
+              li
+                = link_to 'FRIEND', users_index_path, method: :get
+              li
+                = link_to 'MY PAGE', users_show_path, method: :get
+              li
+                = link_to "LOGOUT", destroy_user_session_path, method: :delete
+            - else
+              li.fh5co-active
+                a href="#{new_user_session_path}"  ログイン/会員登録
+
+    .container
+      br
+      br
+      br
+      = yield
+
     = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
 
-  body.p-3.mb-2.bg-dark.text-light
-    nav.navbar.fixed-top.navbar-expand-md.navbar-light style="background-color: #ffffff;"
-      a.navbar-brand href="/"
-        img height="30" src="/assets/gurutomo_logo.jpeg" width="150" alt="ぐるとも！" 
+    /! Modernizr JS
+    script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"
+    / = javascript_pack_tag 'ui_templates/modernizr-2_6_2_min'
 
-      button.navbar-toggler aria-controls="navbar-content" aria-expanded="false" aria-label=("Toggle navigation") data-target="#navbar-content" data-toggle="collapse" type="button" 
-        span.navbar-toggler-icon
-      #navbarSupportedContent.collapse.navbar-collapse.justify-content-end
-        ul.navbar-nav.ml-auto
-          - if current_user
-            li.nav-item = link_to 'お店を探す', restaurants_index_path, class: 'nav-link'
-            li.nav-item = link_to 'ユーザを探す', users_index_path, class: 'nav-link'
-            li.nav-item = link_to 'マイページ', users_show_path, class: 'nav-link'
-            li.nav-item = link_to "ログアウト", destroy_user_session_path, method: :delete, class: 'nav-link'
+    /! jQuery
+    script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"
 
-          - else
-            li.nav-item = link_to "新規登録", new_user_registration_path, class: 'nav-link'
-            li.nav-item = link_to "ログイン", new_user_session_path, class: 'nav-link'
+    /! jQuery Easing
+    script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.js"
 
+    /! Bootstrap
+    script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"
 
-  .container
-    br
-    br
-    br
-    = yield
+    /! Waypoints
+    script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.0/jquery.waypoints.min.js"
+
+    /! Flexslider
+    script src="https://cdnjs.cloudflare.com/ajax/libs/flexslider/2.6.0/jquery.flexslider-min.js"
+
+    /! MAIN JS
+    = javascript_pack_tag 'ui_templates/main'
