@@ -14,10 +14,9 @@ class RestaurantsController < ApplicationController
       @restaurants = Restaurant.get_gurunavi_params_restaurants_arg(results)
       @restaurants = Restaurant.set_accessor(@restaurants, current_user.id)
       @restaurants = Kaminari.paginate_array(@restaurants).page(params[:page])
-      @total_hit_count = results[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_HIT_COUNT]
     else
       # 取得失敗の場合
-      @total_hit_count = Gurunavi::GURUNAVI_RESTAURANT_SEARCH_HIT_COUNT_ZERO
+      # nop
     end
   end
 

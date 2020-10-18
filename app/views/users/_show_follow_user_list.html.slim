@@ -1,49 +1,44 @@
-.row.my-4
+.row.row-bottom-padded-md
+.row.row-bottom-padded-md
   - if follows
     - follows.each_with_index do |follow, i|
-      .col-md-4
-        div class="row bg-light text-dark pt-3 pb-4 ml-1"
-          .col-md-3.pl-3
-            - if follow.image.file.nil?
-              = link_to users_show_path(user: follow.attributes, disp: 'mark_restaurant_list')
-                img src="/assets/user_image_default.jpeg" height="75" width="75" alt="no image"
-            - else
-              = link_to users_show_path(user: follow.attributes, disp: 'mark_restaurant_list')
-                = image_tag(follow.image.to_s, size: 75)
+      .row-bottom-padded-md.col-md-4.animate-box data-animate-effect="fadeInLeft"
+        .col-md-12.pb-5
+          - if follow.image.file.nil?
+            = link_to users_show_path(user: follow.attributes, disp: 'mark_restaurant_list')
+              img src="/assets/profile_image_default.jpeg" class="account_img" alt="no image"
 
-          .col-md-9
-            .user_name = follow.account_name
-            .user_id = "@#{follow.account_id}"
+          - else
+            = link_to users_show_path(user: follow.attributes, disp: 'mark_restaurant_list')
+              = image_tag(follow.image.to_s, size: 75, class: "account_img")
 
-        div class="row bg-light text-dark pb-4 mb-2 ml-1"
-          .col-md-4.follow_info_text
-            | Following
-            br
-              = "#{follow.followings_count}"
+        .col-md-12
+          .row
+            h3
+              a.account_name href="#{users_show_path(user: follow.attributes, disp: 'mark_restaurant_list')}"  #{follow.account_name}
 
-          .col-md-4.follow_info_text
-            | Followers
-            br
-              = "#{follow.followers_count}"
+          .row
+            .account_id = "@#{follow.account_id}"
 
-          .col-md-4
-            - if -1 == follow.is_current_user_following
-              /nop 
-            - elsif 0 == follow.is_current_user_following
-              = link_to follows_create_path(follow.attributes), class: 'follow_btn following', method: :post
-                i.fas.fa-user-check 
-                | 友達になる
-            - elsif 1 == follow.is_current_user_following
-              = link_to follows_destroy_path(follow.attributes), class: 'follow_btn following', method: :post
-                i.fas.fa-user-check 
-                | 友達
-            - elsif 2 == follow.is_current_user_following
-              = link_to follows_destroy_path(follow.attributes), class: 'follow_btn followers', method: :post
-                i.fas.fa-user-plus
-                | 友達リクエスト中
-            - elsif 3 == follow.is_current_user_following
-              = link_to follows_update_path(follow.attributes), class: 'follow_btn followers', method: :post
-                i.fas.fa-user-plus
-                | 承認
-            - else
-              / nop
+          .row
+            .col.md-12.pr-0.pb-5
+              - if -1 == follow.is_current_user_following
+                /nop 
+              - elsif 0 == follow.is_current_user_following
+                = link_to follows_create_path(follow.attributes), class: 'follow_btn'
+                  i.fas.fa-user-check
+                  |  友達になる
+              - elsif 1 == follow.is_current_user_following
+                = link_to follows_destroy_path(follow.attributes), class: 'follow_btn following'
+                  i.fas.fa-user-check 
+                  |  友達　　
+              - elsif 2 == follow.is_current_user_following
+                = link_to follows_destroy_path(follow.attributes), class: 'follow_btn following'
+                  i.fas.fa-user-plus
+                  |  友達リクエスト中
+              - elsif 3 == follow.is_current_user_following
+                = link_to follows_update_path(follow.attributes), class: 'follow_btn'
+                  i.fas.fa-user-plus
+                  |  承認
+              - else
+                / nop

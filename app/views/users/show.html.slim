@@ -1,88 +1,93 @@
-.container
-  .row.bg-light.text-dark.border-bottom.pt-3.pb-3.ml-1
-    .col-md-2.pl-3
-      - if @user.image.file.nil?
-        img src="/assets/user_image_default.jpeg" height="150" width="150" alt="no image"
-      - else
-        = image_tag(@user.image.to_s, size: 150)
+#fh5co-main
+  .fh5co-narrow-content
+  .animate-box data-animate-effect="fadeInLeft"
+    .row-bottom-padded-md
+      .col-md-3.pb-5
+        - if @user.image.file.nil?
+          img src="/assets/profile_image_default.jpeg" class="account_img_big" alt="no image"
+        - else
+          = image_tag(@user.image.to_s, class: "account_img_big")
 
-    .col-md-7
-      .user_name = @user.account_name
-      .user_id = "@#{@user.account_id}"
+      .col-md-9.pb-5
+        .col-12
+          h3.account_name_big = @user.account_name
+        .col-12
+          h5.account_id_big = "@#{@user.account_id}"
+        .col-12
+          = link_to 'アカウント編集', edit_user_registration_path, class: 'user_setting_btn'
 
-    .col-md-3
-      = link_to 'プロフィール編集', edit_user_registration_path, class: 'user_setting_btn'
+    .row-bottom-padded-md
+      .col-md-12.pb-5
+        - if "mark_restaurant_list" == @disp || nil == @disp
+          - @disp = "mark_restaurant_list"
+          / mark_restaurant表示ボタンを選択表示
+          = link_to users_show_path(user: @user.attributes, disp: 'mark_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-selected-border', method: :get
+            i.fas.fa-bookmark 
+            br
+              = "#{@mark_restaurants.count}"
+        - else
+          / mark_restaurant表示ボタンを通常表示
+          = link_to users_show_path(user: @user.attributes, disp: 'mark_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-normal-border', method: :get
+            i.fas.fa-bookmark 
+            br
+              = "#{@mark_restaurants.count}"
 
-  .row.bg-light.text-dark.border-bottom.ml-1
-    .col-md-12
-    - if "mark_restaurant_list" == @disp || nil == @disp
-      - @disp = "mark_restaurant_list"
-      / mark_restaurant表示ボタンを選択表示
-      = link_to users_show_path(user: @user.attributes, disp: 'mark_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-selected-border', method: :get
-        i.fas.fa-bookmark 
-        br
-          = "#{@mark_restaurants.count}"
-    - else
-      / mark_restaurant表示ボタンを通常表示
-      = link_to users_show_path(user: @user.attributes, disp: 'mark_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-normal-border', method: :get
-        i.fas.fa-bookmark 
-        br
-          = "#{@mark_restaurants.count}"
+        - if "went_restaurant_list" == @disp
+          / went_restaurant表示ボタンを選択表示
+          = link_to users_show_path(user: @user.attributes, disp: 'went_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-selected-border', method: :get
+            i.fas.fa-eye
+            br
+              = "#{@went_restaurants.count}"
+        - else
+          / went_restaurant表示ボタンを通常表示
+          = link_to users_show_path(user: @user.attributes, disp: 'went_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-normal-border', method: :get
+            i.fas.fa-eye
+            br
+              = "#{@went_restaurants.count}"
 
-    - if "went_restaurant_list" == @disp
-      / went_restaurant表示ボタンを選択表示
-      = link_to users_show_path(user: @user.attributes, disp: 'went_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-selected-border', method: :get
-        i.fas.fa-eye
-        br
-          = "#{@went_restaurants.count}"
-    - else
-      / went_restaurant表示ボタンを通常表示
-      = link_to users_show_path(user: @user.attributes, disp: 'went_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-normal-border', method: :get
-        i.fas.fa-eye
-        br
-          = "#{@went_restaurants.count}"
+        - if "show_following_list" == @disp
+          / following表示ボタンを選択表示
+          = link_to users_show_path(user: @user.attributes, disp: 'show_following_list'), class: 'user_info_basic_btn selected-border', method: :get
+            | Following
+            br
+              = "#{@user.followings_count}"
+        - else
+          / following表示ボタンを通常表示
+          = link_to users_show_path(user: @user.attributes, disp: 'show_following_list'), class: 'user_info_basic_btn normal-border', method: :get
+            | Following
+            br
+              = "#{@user.followings_count}"
 
-    - if "show_following_list" == @disp
-      / following表示ボタンを選択表示
-      = link_to users_show_path(user: @user.attributes, disp: 'show_following_list'), class: 'user_info_basic_btn selected-border', method: :get
-        | Following
-        br
-          = "#{@user.followings_count}"
-    - else
-      / following表示ボタンを通常表示
-      = link_to users_show_path(user: @user.attributes, disp: 'show_following_list'), class: 'user_info_basic_btn normal-border', method: :get
-        | Following
-        br
-          = "#{@user.followings_count}"
+        - if "show_followers_list" == @disp
+          / followers表示ボタンを選択表示
+          = link_to users_show_path(user: @user.attributes, disp: 'show_followers_list'), class: 'user_info_basic_btn selected-border', method: :get
+            | Followers
+            br
+              = "#{@user.followers_count}"
+        - else
+          / followers表示ボタンを通常表示
+          = link_to users_show_path(user: @user.attributes, disp: 'show_followers_list'), class: 'user_info_basic_btn normal-border', method: :get
+            | Followers
+            br
+              = "#{@user.followers_count}"
 
-    - if "show_followers_list" == @disp
-      / followers表示ボタンを選択表示
-      = link_to users_show_path(user: @user.attributes, disp: 'show_followers_list'), class: 'user_info_basic_btn selected-border', method: :get
-        | Followers
-        br
-          = "#{@user.followers_count}"
-    - else
-      / followers表示ボタンを通常表示
-      = link_to users_show_path(user: @user.attributes, disp: 'show_followers_list'), class: 'user_info_basic_btn normal-border', method: :get
-        | Followers
-        br
-          = "#{@user.followers_count}"
-
-  - if "mark_restaurant_list" == @disp
-    / mark_restaurantリストを表示
-    = render partial: 'show_restaurant_list', locals: {restaurants: @mark_restaurants, disp: @disp}
-    = paginate @mark_restaurants
-  - elsif "went_restaurant_list" == @disp
-    / went_restaurantリストを表示
-    = render partial: 'show_restaurant_list', locals: {restaurants: @went_restaurants, disp: @disp}
-    = paginate @went_restaurants
-  - elsif "show_following_list" == @disp
-    / followingリストを表示
-    = render partial: 'show_follow_user_list', locals: {follows: @followings, disp: @disp}
-    = paginate @followings
-  - elsif "show_followers_list" == @disp
-    / followersリストを表示
-    = render partial: 'show_follow_user_list', locals: {follows: @followers, disp: @disp}
-    = paginate @followers
-  - else
-    / nop
+    .row-bottom-padded-md
+      .col.pl-1
+        - if "mark_restaurant_list" == @disp
+          / mark_restaurantリストを表示
+          = render partial: 'show_restaurant_list', locals: {restaurants: @mark_restaurants, disp: @disp}
+          = paginate @mark_restaurants
+        - elsif "went_restaurant_list" == @disp
+          / went_restaurantリストを表示
+          = render partial: 'show_restaurant_list', locals: {restaurants: @went_restaurants, disp: @disp}
+          = paginate @went_restaurants
+        - elsif "show_following_list" == @disp
+          / followingリストを表示
+          = render partial: 'show_follow_user_list', locals: {follows: @followings, disp: @disp}
+          = paginate @followings
+        - elsif "show_followers_list" == @disp
+          / followersリストを表示
+          = render partial: 'show_follow_user_list', locals: {follows: @followers, disp: @disp}
+          = paginate @followers
+        - else
+          / nop

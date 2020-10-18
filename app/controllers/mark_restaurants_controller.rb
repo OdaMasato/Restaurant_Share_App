@@ -17,7 +17,7 @@ class MarkRestaurantsController < ApplicationController
     mark_restaurant = MarkRestaurant.new
     mark_restaurant.user_id = current_user.id
     mark_restaurant.gurunavi_id = restaurant.gurunavi_id
-    mark_restaurant.score = params.require(:score_avg)
+    mark_restaurant.score = params.require(:score)
 
     # ☆エラー処理するのが望ましい
     mark_restaurant.save!
@@ -35,9 +35,5 @@ class MarkRestaurantsController < ApplicationController
     mark_restaurant.destroy!
 
     redirect_to restaurants_index_path
-  end
-
-  def new
-    @restaurant = Restaurant.get_param_restaurant(params)
   end
 end

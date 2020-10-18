@@ -1,29 +1,28 @@
-.row.my-4
-  - if restaurants
-    - restaurants.each_with_index do |restaurant, i|
-      .col-md-6
-        / 店舗情報hedder
-        div class="row bg-light text-dark border-bottom ml-1"
-          .col-md-12.my-2
-            = link_to "#{restaurant.name}", restaurants_show_path(restaurant.attributes), class: "restaurant_index_header_main"
-            .restaurant_index_header_sub  = "　#{restaurant.access_station}付近"
+/ 店舗情報表示
+- if restaurants
+  .row.row-bottom-padded-md
+  - restaurants.each do |restaurant|
+      .col-md-3.col-sm-6.col-padding.animate-box data-animate-effect="fadeInLeft" 
+        .blog-entry
 
-        / 店舗情報body
-        div class="row bg-white text-dark py-4 mb-4 ml-1"
-          .col-md-6
-            = link_to restaurants_show_path(restaurant.attributes), class: "restaurant_index_header_main"
-              = image_tag(restaurant.image_url, size: '240x240')
+          / イメージ画像
+          a.blog-img href="#{restaurants_show_path(restaurant.attributes)}"
+            img.img-responsive alt=("#{restaurant.name}") src="#{restaurant.image_url}"
+          .desc
+            / 飲食店名
+            h3.card_title
+              a href="#{restaurant.gurunavi_url}"  #{restaurant.name}
 
-          .col-md-6
-            / ユーザ評価
-            .score_icon
-              - if "mark_restaurant_list" == disp
-                - score_tmp = restaurant.score
-                - score_text = restaurant.score
-              - else
-                - score_tmp = restaurant.score_avg
-                - score_text = restaurant.score_avg
+            / アクセス
+            span
+              small ="#{restaurant.access_station}から徒歩#{restaurant.access_walk}分"
 
+            / PR文
+            p.card_pr_short ="#{restaurant.pr_short}"
+
+            / 評価
+            - if restaurant.score
+              - score_tmp = restaurant.score
               - for i in (1..5) do
                 - if (0 < score_tmp)
                   - if (1 <= score_tmp)
@@ -33,26 +32,4 @@
                 - else
                   i.far.fa-star
                 - score_tmp-=1
-              .score_text = " #{score_text}"
-            
-            / PR文
-            p = link_to "#{restaurant.pr_short}", restaurants_show_path(restaurant.attributes), class: "mark_restaurant_index_body_pr_text"
-
-            .row
-              .col-md-12
-                / 行ったお店ボタン
-                - if restaurant.mark_restaurant_current_user_reg
-                  = link_to mark_restaurants_destroy_path(restaurant.attributes), class: 'mark_went_restaurant_btn selected-border', method: :post
-                    i.fas.fa-bookmark = " #{restaurant.mark_restaurant_count}"
-                  
-                - else
-                  = link_to mark_restaurants_new_path(restaurant.attributes), class: 'mark_went_restaurant_btn normal-border', method: :get
-                    i.fas.fa-bookmark = " #{restaurant.mark_restaurant_count}"
-
-                / 行きたいお店ボタン
-                - if restaurant.went_restaurant_current_user_reg
-                  = link_to went_restaurants_destroy_path(restaurant.attributes), class: 'mark_went_restaurant_btn selected-border', method: :post
-                    i.fas.fa-eye = " #{restaurant.went_restaurant_count}"
-                - else
-                  = link_to went_restaurants_create_path(restaurant.attributes), class: 'mark_went_restaurant_btn normal-border', method: :post
-                    i.fas.fa-eye = " #{restaurant.went_restaurant_count}"
+              .score_text = " #{restaurant.score_avg}"

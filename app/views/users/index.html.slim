@@ -1,10 +1,16 @@
-/ ユーザ検索フォーム・検索ボタン
-= form_with url: users_index_path, method: 'get', local: true do |f|
-    .form-group
-      .row
-        .col-lg-5
-          = f.text_field :search, class: 'form-control', placeholder: '例: tanakatarou', id: 'score'
-        .col-lg-2
-          = f.submit '検索', class: 'btn btn-light'
+#fh5co-main
+  .fh5co-narrow-content
+    h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft"  FIND FRIEND
 
-= render partial: 'show_follow_user_list', locals: {follows: @users}
+    / 店舗名入力フォーム・検索ボタン
+    .animate-box data-animate-effect="fadeInLeft"
+      / ユーザ検索フォーム・検索ボタン
+      = form_with url: users_index_path, method: 'get', local: true do |f|
+          .form-group
+            .row
+              .col-lg-5
+                = f.text_field :search, class: 'form-control', placeholder: '例: tanaka', id: 'score'
+              .col-lg-2
+                = f.submit '検索', class: 'btn btn-light'
+
+    = render partial: 'show_follow_user_list', locals: {follows: @users}

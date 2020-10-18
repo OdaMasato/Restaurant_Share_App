@@ -2,8 +2,6 @@ class Follow < ApplicationRecord
 
   # アソシエーション
   belongs_to :user
-  has_many :mark_restaurant, primary_key: 'follow_id', foreign_key: 'user_id'
-  has_many :went_restaurant, primary_key: 'follow_id', foreign_key: 'user_id'
 
   # 定数
   GET_FOLLOWS_INFO_TYPE_FOLLOWINGS = 0 #get_follows_infoでフォロー中user情報取得指定用定数

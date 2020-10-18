@@ -4,9 +4,12 @@
 // that code so it'll be compiled.
 
 require("@rails/ujs").start()
-require("turbolinks").start()
 require("@rails/activestorage").start()
 require("channels")
+
+/* turbolinksによる画面遷移時、rails-ujsが2回読み込まれ、
+   data-animate-effect="fadeInLeft"が発火しない問題が発生するため、turbolinks機能を無効化 */
+// require("turbolinks").start()
 
 // Uncomment to copy all static images under ../images to the output folder and reference
 // them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)
@@ -14,4 +17,3 @@ require("channels")
 //
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
-// = require_tree .

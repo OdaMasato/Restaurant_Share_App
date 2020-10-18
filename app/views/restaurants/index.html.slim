@@ -1,32 +1,3 @@
-/ #fh5co-main
-/   .fh5co-narrow-content
-/     .row.row-bottom-padded-md
-/     h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft"  Read Our Blog
-      / 店舗名入力フォーム・検索ボタン
-      = form_with url: restaurants_index_path, method: 'get', local: true do |f|
-          .form-group
-            .row
-              .col-lg-5
-                = f.text_field :search, class: 'form-control', placeholder: '例: 東京 新宿 やきとり', id: 'score'
-              .col-lg-2
-                = f.submit '検索', class: 'btn btn-light'
-
-/       / 検索結果数
-/       .col-lg-4
-/         - if 100 < @total_hit_count
-/           p = "100件以上の候補が見つかりました"
-/         - else
-/           p = "#{@total_hit_count} 件の候補が見つかりました"
-
-/       - if @restaurants
-/         - @restaurants.each do |restaurant|
-/           / 店舗情報表示
-/           .container
-/             = render partial: 'restaurant_list', locals: {restaurant: restaurant}
-
-/ = paginate @restaurants
-
-
 #fh5co-main
   .fh5co-narrow-content
     h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft"  FIND RESTAURANT
@@ -37,20 +8,18 @@
           .form-group
             .row
               .col-lg-5
-                = f.text_field :search, class: 'form-control', placeholder: '例: 東京 新宿 やきとり', id: 'score'
+                = f.text_field :search, class: 'form-control', placeholder: '例:　東京 イタリアン', id: 'score'
               .col-lg-2
                 = f.submit '検索', class: 'btn btn-light'
-    
-      / 検索結果数
-      - if 100 < @total_hit_count
-        p = "100件以上の候補が見つかりました。"
-      - else
-        p = "#{@total_hit_count} 件の候補が見つかりました"
 
+    / 店舗情報表示
     - if @restaurants
       .row.row-bottom-padded-md
       - @restaurants.each do |restaurant|
-        / 店舗情報表示
         = render partial: 'restaurant_list', locals: {restaurant: restaurant}
 
-    = paginate @restaurants
+      .row.row-bottom-padded-md
+        .col.animate-box data-animate-effect="fadeInLeft" = paginate @restaurants
+      
+      / ☆ページネーション表示用
+      .row.row-bottom-padded-md

@@ -12,10 +12,12 @@ class UsersController < ApplicationController
     # フォロー中のユーザ情報を取得
     @followings = Follow.get_follows_info(@user, Follow::GET_FOLLOWS_INFO_TYPE_FOLLOWINGS, current_user.id)
     @followings = Kaminari.paginate_array(@followings).page(params[:page])
+    @followings.sort_by{ |a| a.followers_count}.reverse
 
     # フォローされているユーザ情報を取得
     @followers  = Follow.get_follows_info(@user, Follow::GET_FOLLOWS_INFO_TYPE_FOLLOWERS, current_user.id)
     @followers = Kaminari.paginate_array(@followers).page(params[:page])
+    @followings.sort_by{ |a| a.followers_count}.reverse
 
     # ログイン中ユーザが登録しているmark_restaurantのrestaurant情報を取得
     @mark_restaurants = MarkRestaurant.get_mark_restaurant_info(@user.id, current_user.id)

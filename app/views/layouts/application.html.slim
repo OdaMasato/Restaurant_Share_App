@@ -12,20 +12,6 @@ html.no-js
     meta content="free html5), free template, free bootstrap, free website template, html5, css3, mobile first, responsive" name="keywords"
     meta content="FreeHTML5.co" name="author"
 
-    /!
-      | \//////////////////////////////////////////////////////
-      
-      | FREE HTML5 TEMPLATE
-      | DESIGNED &amp; DEVELOPED by FreeHTML5.co
-      
-      | Website: 		http://freehtml5.co/
-      | Email: 			info@freehtml5.co
-      | Twitter: 		http://twitter.com/fh5co
-      | Facebook: 		https://www.facebook.com/fh5co
-      
-      | \//////////////////////////////////////////////////////
-
-    /! Facebook and Twitter integration
     meta content="" property="og:title" /
     meta content="" property="og:image" /
     meta content="" property="og:url" /
@@ -43,8 +29,6 @@ html.no-js
     = stylesheet_link_tag("ui_templates/animate", media: 'all')
     /! Icomoon Icon Fonts
     = stylesheet_link_tag("ui_templates/icomoon", media: 'all')
-    / /! Bootstrap
-    / link href="css/bootstrap.css" rel="stylesheet" /
     /! Flexslider
     = stylesheet_link_tag("ui_templates/flexslider", media: 'all')
     /! Theme style
@@ -53,6 +37,7 @@ html.no-js
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
 
   body
+
     #fh5co-page
       a.js-fh5co-nav-toggle.fh5co-nav-toggle href="#{pages_home_path}"
         i
@@ -63,9 +48,9 @@ html.no-js
           ul
             - if current_user
               li.fh5co-active
-                = link_to 'SEARCH', restaurants_index_path, method: :get
+                = link_to 'RESTAURANTS', restaurants_index_path, method: :get
               li
-                = link_to 'FRIEND', users_index_path, method: :get
+                = link_to 'USERS', users_index_path, method: :get
               li
                 = link_to 'MY PAGE', users_show_path, method: :get
               li
@@ -80,7 +65,6 @@ html.no-js
       br
       = yield
 
-    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
 
     /! Modernizr JS
     script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"
@@ -103,3 +87,5 @@ html.no-js
 
     /! MAIN JS
     = javascript_pack_tag 'ui_templates/main'
+
+    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
