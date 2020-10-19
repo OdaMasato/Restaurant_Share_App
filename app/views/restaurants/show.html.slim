@@ -87,7 +87,46 @@
             = link_to "ぐるなび", @restaurant.gurunavi_url, class: 'gurunavi_btn normal-border'
 
       .col-md-4
-          = image_tag(@restaurant.image_url)
+        = image_tag(@restaurant.image_url)
+
+#fh5co-main
+  .fh5co-narrow-content
+    - if !(@follows.empty?)
+      .row.row-bottom-padded-md
+      h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft"  EVALUATION USER
+      - @follows.each do |follow|
+        .row-bottom-padded-md.col-md-4.animate-box data-animate-effect="fadeInLeft"
+          .col-md-12.pb-5
+            - if follow.image.file.nil?
+              = link_to users_show_path(user: follow.attributes, disp: 'mark_restaurant_list')
+                img src="/assets/profile_image_default.jpeg" class="account_img" alt="no image"
+
+            - else
+              = link_to users_show_path(user: follow.attributes, disp: 'mark_restaurant_list')
+                = image_tag(follow.image.to_s, size: 75, class: "account_img")
+
+          .col-md-12
+            .row
+              h3
+                a.account_name href="#{users_show_path(user: follow.attributes, disp: 'mark_restaurant_list')}"  #{follow.account_name}
+
+            .row
+              .account_id = "@#{follow.account_id}"
+
+            .row.evaluation_main
+              / 評価
+              - if follow.evaluated_restaurant_score
+                - score_tmp = follow.evaluated_restaurant_score
+                - for i in (1..5) do
+                  - if (0 < score_tmp)
+                    - if (1 <= score_tmp)
+                      i.fas.fa-star
+                    - else
+                      i.fas.fa-star-half-alt
+                  - else
+                    i.far.fa-star
+                  - score_tmp-=1
+                .score_text = " #{follow.evaluated_restaurant_score}"
 
 
 #markRestaurantModal.modal.fade aria-hidden="true" aria-labelledby="wentTitle" role="dialog" tabindex="-1" 
@@ -122,8 +161,6 @@
             - if true == @restaurant.mark_restaurant_current_user_reg
               = link_to '削除', mark_restaurants_destroy_path(@restaurant.attributes), class: 'btn btn-danger', method: :post
             = f.submit '保存', class: 'btn btn-primary'
-
-
 
 
 / ModalWindow実現用JavaScript

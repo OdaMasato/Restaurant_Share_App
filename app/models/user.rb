@@ -16,7 +16,7 @@ class User < ApplicationRecord
   mount_uploader :image, ImageUploader
 
   # accessor
-  attr_accessor :followings_count ,:followers_count, :is_current_user_following
+  attr_accessor :followings_count ,:followers_count, :is_current_user_following, :evaluated_restaurant_score
 
   # [概　要] ユーザ情報を取得
   # [引　数] User::user_id

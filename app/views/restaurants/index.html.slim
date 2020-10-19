@@ -2,19 +2,36 @@
   .fh5co-narrow-content
     h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft"  FIND RESTAURANT
 
-    / 店舗名入力フォーム・検索ボタン
+    / 入力フォーム・検索ボタン
     .animate-box data-animate-effect="fadeInLeft" 
       = form_with url: restaurants_index_path, method: 'get', local: true do |f|
           .form-group
             .row
-              .col-lg-5
+              .col-md-5
                 = f.text_field :search, class: 'form-control', placeholder: '例:　東京 イタリアン', id: 'score'
-              .col-lg-2
+              .col-md-2
                 = f.submit '検索', class: 'btn btn-light'
+    .row
+    .row.row-bottom-padded-md.animate-box data-animate-effect="fadeInLeft" 
+      .col-md-7
+      .col-md-3.pl-5.pr-0
+        .filter_descript_text
+          Following User Contents Only 
+      .col-md-2.pb-2.pl-2
+        .dropdown
+          - if false == @is_disp_filter
+            .dropdownMenuLink.btn.btn-secondary.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" href="#" role="button" style="display :block"
+              | OFF
+          - else
+            .dropdownMenuLink.btn.btn-danger.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" href="#" role="button" style="display :block"
+              | ON
+          .dropdown-menu aria-labelledby="dropdownMenuLink" 
+            = link_to "OFF", restaurants_index_path(is_disp_filter: false), class: 'dropdown-item'
+            = link_to "ON", restaurants_index_path(is_disp_filter: true), class: 'dropdown-item'
 
     / 店舗情報表示
     - if @restaurants
-      .row.row-bottom-padded-md
+      .row
       - @restaurants.each do |restaurant|
         = render partial: 'restaurant_list', locals: {restaurant: restaurant}
 

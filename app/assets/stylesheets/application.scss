@@ -345,7 +345,24 @@ input[type="range"] {
   color: white;
 }
 
-.user_edit_input_field
-{
+.user_edit_input_field{
   width: 395px;
+}
+
+.filter_descript_text{
+  font-size: 11px; 
+  text-align: right;  
+  height: 30px;
+  line-height: 30px;
+}
+
+.evaluation_main{
+  width: 140px;
+  color: black;
+  text-align: center;
+  padding-left: 15px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
 }

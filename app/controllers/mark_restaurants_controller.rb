@@ -3,7 +3,6 @@ class MarkRestaurantsController < ApplicationController
   before_action :authenticate_user!
 
   def create
-
     restaurant = Restaurant.get_param_restaurant(params)
 
     # RestaurantTableに同一IDのレコードが存在しない場合、restaurantを登録する

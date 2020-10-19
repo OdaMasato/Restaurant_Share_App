@@ -1,7 +1,7 @@
 .row.row-bottom-padded-md
 .row.row-bottom-padded-md
   - if follows
-    - follows.each_with_index do |follow, i|
+    - follows.each do |follow|
       .row-bottom-padded-md.col-md-4.animate-box data-animate-effect="fadeInLeft"
         .col-md-12.pb-5
           - if follow.image.file.nil?

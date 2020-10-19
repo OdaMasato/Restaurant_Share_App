@@ -1,7 +1,7 @@
 CarrierWave.configure do |config|
-  if Rails.env.production?
+  # if Rails.env.production?
     config.storage    = :aws
-    config.aws_bucket = "バケット名"
+    config.aws_bucket = "rails-user-image"
     config.aws_acl    = 'public-read'
 
     # The maximum period for authenticated_urls is only 7 days.
@@ -20,8 +20,8 @@ CarrierWave.configure do |config|
         secret_access_key: Rails.application.credentials.dig(:aws, :secret_access_key),
         region:            'ap-northeast-1'
     }
-  else
-    # 本番環境以外はローカルにファイルを保存する
-    config.storage    = :file
-  end
+  # else
+  #   # 本番環境以外はローカルにファイルを保存する
+  #   config.storage    = :file
+  # end
 end

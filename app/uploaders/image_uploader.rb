@@ -7,14 +7,15 @@ class ImageUploader < CarrierWave::Uploader::Base
   if Rails.env.production?
     storage :aws
   else
-  # 開発環境でテストする場合はこちらもawsに変更してください。
-    storage :file
+    開発環境でテストする場合はこちらもawsに変更してください。
+    storage :aws
   end
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+    # "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+    "uploads"
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:

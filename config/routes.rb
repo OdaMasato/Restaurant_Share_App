@@ -5,15 +5,13 @@ Rails.application.routes.draw do
   get 'users/show'
   get 'users/index'
 
-  get 'follows/index'
-  get 'follows/show'
   get 'follows/create'
   get 'follows/update'
   get 'follows/destroy'
 
   get 'restaurants/index'
   get 'restaurants/show'
-  
+
   post 'mark_restaurants/create'
   post 'mark_restaurants/destroy'
 

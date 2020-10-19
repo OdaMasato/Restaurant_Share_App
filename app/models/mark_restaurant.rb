@@ -25,15 +25,14 @@ class MarkRestaurant < ApplicationRecord
     end
     restaurants.sort_by{ |u| u[1]}.reverse
   end
-
+  
   # [概　要] mark_restaurantのscore上位10件のrestaurant情報を取得
   # [引　数] なし
   # [戻り値] restaurant配列
   # [説　明] mark_restaurantに登録されているscoreが高い順にnumの件数、restaurant情報取得する
   def self.get_mark_restaurant_info_top(num = 100)
-
+    
     restaurants = []
-    # mark_restaurants = MarkRestaurant.group(:gurunavi_id).average(:score).sort_by{ |u| u.score}.reverse
     mark_restaurants = MarkRestaurant.group(:gurunavi_id).average(:score)
     mark_restaurants.sort_by{ |u| u[1]}.reverse
     
@@ -46,7 +45,27 @@ class MarkRestaurant < ApplicationRecord
       restaurants << restaurant
       break if i == num
     end
-
+    
     restaurants
+  end
+
+  # [概　要] 引数の受け渡されたユーザがフォローユーザの全mark_restaurantのrestaurant情報を取得
+  # [引　数] User::user_id
+  # [戻り値] restaurant配列
+  # [説　明] 引数の受け渡されたユーザがフォローユーザの全mark_restaurantのrestaurant情報を返す
+  def self.get_mark_restaurant_info_following_onry(current_user_id)
+
+    mark_restaurants = User.joins(:MarkRestaurant, :Follow).where(follows: {user_id: current_user_id}, follows:{follow_status: Follow::FOLLOW_STATUS_TYPE_FOLLOWING}).group(:gurunavi_id).average(:score)
+
+    restaurants = []
+
+    # mark_restaurantのrestaurant情報を取得し配列に格納
+    mark_restaurants.each do |mark_restaurant|
+      restaurant = Restaurant.new
+      restaurant = Restaurant.find_by(gurunavi_id: mark_restaurant[0])
+      restaurant = Restaurant.set_accessor(restaurant, current_user_id, current_user_id)
+      restaurants << restaurant
+    end
+    restaurants.sort_by{ |u| u[1]}.reverse
   end
 end
