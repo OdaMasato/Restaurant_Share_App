@@ -7,7 +7,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   if Rails.env.production?
     storage :aws
   else
-    開発環境でテストする場合はこちらもawsに変更してください。
+    # 開発環境でテストする場合はこちらもawsに変更してください。
     storage :aws
   end
 
