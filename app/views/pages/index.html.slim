@@ -1,0 +1,101 @@
+#fh5co-main
+  aside#fh5co-hero.js-fullheight
+    .flexslider.js-fullheight
+      ul.slides
+
+        li style=("background-image: url(/assets/ui_templates/img_bg_2.jpg);") 
+          .overlay
+          .container-fluid
+            .row
+              .col-md-8.col-md-offset-2.text-center.js-fullheight.slider-text
+                .slider-text-inner
+                  h1
+                    | 口コミであふれる時代
+                    br
+                    | だからこそ。
+                  h2
+                    | RECOMENDは確実なお店選びを提供します。
+
+        li style=("background-image: url(/assets/ui_templates/img_bg_1.jpg);") 
+          .overlay
+          .container-fluid
+            .row
+              .col-md-8.col-md-offset-2.text-center.js-fullheight.slider-text
+                .slider-text-inner
+                  h1
+                    | RECOMEND
+                    br
+                  h2
+                    | 友人特化型の飲食店評価共有サービスです。
+                    br
+    .fh5co-narrow-content
+      h2.fh5co-heading.border-bottom.animate-box data-animate-effect="fadeInLeft"  What is RECOMEND？
+      .row
+        .col-md-12
+          .fh5co-feature.animate-box data-animate-effect="fadeInLeft" 
+            .font-weight-normal
+              .font-weight-bold.mb-2
+                |「お店どこにしよう」 
+              .font-weight-nomal
+                | 外食の予定を立てた時、飲食店サイトでお店を検索して、
+                | 評価が高いお店に行くことって多いですよね。
+                br
+                | その選び方、絶対に外したくない時にするの怖くありませんか？
+                br
+                br
+                | 例えば、恋人との初デートや上司との会食、大人数での宴会など
+                | 「今日はお店選び失敗したくない」って場面ってありますよね。
+                br
+                | そんな時、知らない人が付けた高評価を信じて
+                | お店を選ぶのって少し勇気が入りますよね。
+                br
+                br
+                | RECOMENDは、お店の評価を友人間で共有することで
+                |  "信頼できる人(友人)"が付けた評価を見てお店を選ぶことができます。
+                br
+                | 「行ったことが無いお店でも失敗しない」そんなお店選びを提供するサービスです。
+
+    .fh5co-narrow-content
+      h2.fh5co-heading.border-bottom.animate-box data-animate-effect="fadeInLeft"  Services
+      .row
+        .col-md-6
+          .fh5co-feature.animate-box data-animate-effect="fadeInLeft" 
+            .fh5co-icon
+              i.icon-search4
+            .fh5co-text
+              h3 SEARCH
+              p あなたの友人が訪れた飲食店を知ることができ、友人が"美味しかった"と評価したお店の中から、次に行くお店を選ぶことができます。
+        .col-md-6
+          .fh5co-feature.animate-box data-animate-effect="fadeInLeft" 
+            .fh5co-icon
+              i.icon-user-add
+            .fh5co-text
+              h3 FRIEND
+              p あなたの友人を探して、フォローすることができます。
+        .col-md-6
+          .fh5co-feature.animate-box data-animate-effect="fadeInLeft" 
+            .fh5co-icon
+              i.icon-pencil
+            .fh5co-text
+              h3 RECORD
+              p あなたが訪れた飲食店の評価を残すことができ、あなたが「また行きたい」と感じたお店を記録することができます。
+
+    .fh5co-narrow-content
+    h2.fh5co-heading.border-bottom.animate-box data-animate-effect="fadeInLeft"  POPULAR
+    .row.row-bottom-padded-md
+      - @restaurants.each do |restaurant|
+        / 店舗情報表示
+        = render partial: 'restaurants/restaurant_list', locals: {restaurant: restaurant, type: 'home'}
+
+    - if current_user.nil?
+      #get-in-touch
+        .fh5co-narrow-content
+          .row
+            .col-md-4.animate-box data-animate-effect="fadeInLeft" 
+              h1.fh5co-heading-colored Let's Receive service
+          .row
+            .col-md-6.col-md-offset-3.col-md-pull-3.animate-box data-animate-effect="fadeInLeft" 
+              p.fh5co-lead 登録は1分程度で終わります。
+              p
+                a.btn.btn-primary href="#{new_user_registration_path}" 無料会員登録
+                a.btn.btn-primary.btn-learn href="#{new_user_session_path}" ログイン

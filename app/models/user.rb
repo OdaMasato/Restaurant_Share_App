@@ -19,8 +19,8 @@ class User < ApplicationRecord
   attr_accessor :followings_count ,:followers_count, :is_current_user_following, :evaluated_restaurant_score
 
   # [概　要] ユーザ情報を取得
-  # [引　数] User::user_id
-  # [戻り値] 正常完了:0以上の整数 / 正常完了以外:0
+  # [引　数] 対象のユーザID
+  # [戻り値] Userオブジェクト
   # [説　明] 引数で指定されたユーザIDのユーザ情報を返す
   def self.get_user_info(user_id, current_user_id)
     user = User.find_by(id: user_id)
@@ -28,11 +28,10 @@ class User < ApplicationRecord
   end
 
   # [概　要] Userオブジェクトのaccessorに値を代入する
-  # [引　数] User::user_id,User::Userオブジェクト
+  # [引　数] 対象のユーザID、ログイン中ユーザID
   # [戻り値] Userオブジェクト
   # [説　明] Userオブジェクトのaccesorに値をセットする
   def self.set_accessor(user_info, current_user_id)
-
     follow = Follow.find_by(user_id: current_user_id, follow_id: user_info.id)
 
     if user_info.id == current_user_id

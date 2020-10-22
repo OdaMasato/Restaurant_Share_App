@@ -2,7 +2,6 @@ class RestaurantsController < ApplicationController
   require 'Gurunavi'
 
   def index
-
     @is_disp_filter = params[:is_disp_filter]
     if (@is_disp_filter.nil?)
       @is_disp_filter = 'off'

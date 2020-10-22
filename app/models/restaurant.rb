@@ -1,5 +1,7 @@
 class Restaurant < ApplicationRecord
 
+  validates :gurunavi_id, uniqueness: true
+
   # アソシエーション
   has_many :MarkRestaurant,primary_key: 'gurunavi_id', foreign_key: 'gurunavi_id'
   has_many :WentRestaurant,primary_key: 'gurunavi_id', foreign_key: 'gurunavi_id'
@@ -72,11 +74,10 @@ class Restaurant < ApplicationRecord
   private
 
   # [概　要] Restaurantオブジェクトのaccessorに値を代入する
-  # [引　数] Restaurantオブジェクト(配列 or 単体), ユーザID
+  # [引　数] Restaurantオブジェクト(配列 or 単体), 対象のユーザID、ログイン中ユーザID
   # [戻り値] Restaurant配列
   # [説　明] Restaurantオブジェクトのscoreにmark_restaurantのscore平均をセットする
   def self.set_accessor(restaurant_org, user_id = nil, current_user_id = user_id)
-
     if Array == restaurant_org.class 
       # 引数が配列型の場合
       restaurants = []
@@ -93,11 +94,10 @@ class Restaurant < ApplicationRecord
   end
 
   # [概　要] set_accessorの作業用メソッド Restaurantオブジェクトのaccessorに値を代入する(modelからの値取得処理)
-  # [引　数] Restaurantオブジェクト,ユーザID,カレントユーザID
+  # [引　数] Restaurantオブジェクト,対象のユーザID、ログイン中ユーザID
   # [戻り値] Restaurantオブジェクト
   # [説　明] Restaurantオブジェクトのaccerssorに値をセットする
   def self.set_accessor_get_model_value(restaurant, user_id, current_user_id)
-
     restaurant.score = RESTAURANT_ACCER_ZERO
     restaurant.score_avg = RESTAURANT_ACCER_ZERO
     restaurant.mark_restaurant_count = RESTAURANT_ACCER_ZERO
