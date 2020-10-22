@@ -11,8 +11,8 @@ class MarkRestaurantsController < ApplicationController
     else
       # nop
     end
-
-    # MarkRestaurantTableにレコード追加
+    
+    # MarkRestaurantTableにレコードを登録
     mark_restaurant = MarkRestaurant.new
     mark_restaurant.user_id = current_user.id
     mark_restaurant.gurunavi_id = restaurant.gurunavi_id
@@ -32,6 +32,18 @@ class MarkRestaurantsController < ApplicationController
     # MarkRestaurantTableのレコード削除
     mark_restaurant = MarkRestaurant.find_by(gurunavi_id: restaurant.gurunavi_id, user_id: current_user.id)
     mark_restaurant.destroy!
+
+    redirect_to restaurants_index_path
+  end
+
+  def update()
+    # パラメータからrestaurant情報を取得
+    restaurant = Restaurant.new
+    restaurant = Restaurant.get_param_restaurant(params)
+
+    # MarkRestaurantTableのレコード削除
+    mark_restaurant = MarkRestaurant.find_by(gurunavi_id: restaurant.gurunavi_id, user_id: current_user.id)
+    mark_restaurant.update!(score: params.require(:score))
 
     redirect_to restaurants_index_path
   end

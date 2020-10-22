@@ -2,7 +2,7 @@
   .fh5co-narrow-content
     h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft" ログイン
     - if "" != alert
-      p.alert = alert
+      p.alert.animate-box data-animate-effect="fadeInLeft" = alert
     .animate-box data-animate-effect="fadeInLeft"
       = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
         .row-bottom-padded-md.my-5
@@ -19,5 +19,7 @@
               = f.password_field :password, autocomplete: "current-password", class: "user_edit_input_field"
         .row-bottom-padded-md.my-5
           .col-md-12.pb-5
-            .actions
-              = f.submit "ログイン", class: 'btn btn-primary'
+            .col-md-5.pl-0
+            .col-md-7.pl-0
+              .actions
+                = f.submit "ログイン", class: 'btn btn-primary'

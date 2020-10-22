@@ -70,6 +70,7 @@ gem 'devise'
 # pry-hoge(デバッグ用ライブラリ)を導入する
 gem 'pry-rails'
 gem 'pry-doc'
+gem 'pry-byebug'
 
 # kaminariを導入する
 gem 'kaminari'

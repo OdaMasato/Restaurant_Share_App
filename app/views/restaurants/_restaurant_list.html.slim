@@ -1,13 +1,24 @@
 .col-md-3.col-sm-6.col-padding.animate-box data-animate-effect="fadeInLeft" 
   .blog-entry
 
-    / イメージ画像
-    a.blog-img href="#{restaurants_show_path(restaurant.attributes)}"
-      img.img-responsive alt=("#{restaurant.name}") src="#{restaurant.image_url}"
+    - if "home" == type
+      / イメージ画像(押下時、ぐるなび画面遷移)
+      a.blog-img href="#{restaurant.gurunavi_url}"
+        img.img-responsive alt=("#{restaurant.name}") src="#{restaurant.image_url}"
+    - else
+      / イメージ画像
+      a.blog-img href="#{restaurants_show_path(restaurant.attributes)}"
+        img.img-responsive alt=("#{restaurant.name}") src="#{restaurant.image_url}"
+    
     .desc
-      / 飲食店名
-      h3.card_title
-        a href="#{restaurant.gurunavi_url}"  #{restaurant.name}
+      - if "home" == type
+        / 飲食店名(押下時、ぐるなび画面遷移)
+        h3.card_title
+          a href="#{restaurant.gurunavi_url}"  #{restaurant.name}
+      - else
+        / 飲食店名
+        h3.card_title
+          a href="#{restaurants_show_path(restaurant.attributes)}"  #{restaurant.name}
 
       / アクセス
       span
@@ -17,15 +28,19 @@
       p.card_pr_short ="#{restaurant.pr_short}"
 
       / 評価
-      - if restaurant.score_avg
-        - score_tmp = restaurant.score_avg
-        - for i in (1..5) do
-          - if (0 < score_tmp)
-            - if (1 <= score_tmp)
-              i.fas.fa-star
+      - if "home" != type
+        - if restaurant.score_avg
+          - score_tmp = restaurant.score_avg
+          - for i in (1..5) do
+            - if (0 < score_tmp)
+              - if (1 <= score_tmp)
+                i.fas.fa-star
+              - else
+                i.fas.fa-star-half-alt
             - else
-              i.fas.fa-star-half-alt
+              i.far.fa-star
+            - score_tmp-=1
+          - if 0 < restaurant.mark_restaurant_count
+            .score_text = " #{restaurant.score_avg}"
           - else
-            i.far.fa-star
-          - score_tmp-=1
-        .score_text = " #{restaurant.score_avg}"
+            .score_text = " -"

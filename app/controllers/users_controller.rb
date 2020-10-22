@@ -10,13 +10,8 @@ class UsersController < ApplicationController
     end
 
     # フォロー中のユーザ情報を取得
-    @followings = Follow.get_follows_info(@user, Follow::GET_FOLLOWS_INFO_TYPE_FOLLOWINGS, current_user.id)
+    @followings = Follow.get_follows_info(@user, current_user.id)
     @followings = Kaminari.paginate_array(@followings).page(params[:page])
-    @followings.sort_by{ |a| a.followers_count}.reverse
-
-    # フォローされているユーザ情報を取得
-    @followers  = Follow.get_follows_info(@user, Follow::GET_FOLLOWS_INFO_TYPE_FOLLOWERS, current_user.id)
-    @followers = Kaminari.paginate_array(@followers).page(params[:page])
     @followings.sort_by{ |a| a.followers_count}.reverse
 
     # ログイン中ユーザが登録しているmark_restaurantのrestaurant情報を取得
@@ -37,7 +32,7 @@ class UsersController < ApplicationController
       @users = User.where('account_name LIKE ?', "%#{params[:search]}%").where.not(id: current_user.id)
     end
     
-    @users = Follow.get_follows_info(@users, Follow::GET_FOLLOWS_INFO_TYPE_FOLLOWINGS, current_user.id)
+    @users = Follow.get_follows_info(@users, current_user.id)
     @users = Kaminari.paginate_array(@users).page(params[:page])
   end
 

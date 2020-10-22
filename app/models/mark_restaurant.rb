@@ -49,15 +49,15 @@ class MarkRestaurant < ApplicationRecord
     restaurants
   end
 
-  # [概　要] 引数の受け渡されたユーザがフォローユーザの全mark_restaurantのrestaurant情報を取得
-  # [引　数] User::user_id
+  # [概　要] 引数の受け渡されたユーザのフォロー中ユーザの全mark_restaurantのrestaurant情報を取得
+  # [引　数] User::user_id, keyword
   # [戻り値] restaurant配列
   # [説　明] 引数の受け渡されたユーザがフォローユーザの全mark_restaurantのrestaurant情報を返す
-  def self.get_mark_restaurant_info_following_onry(current_user_id)
-
-    mark_restaurants = User.joins(:MarkRestaurant, :Follow).where(follows: {user_id: current_user_id}, follows:{follow_status: Follow::FOLLOW_STATUS_TYPE_FOLLOWING}).group(:gurunavi_id).average(:score)
+  # 　　　　　なお、keywordが渡された場合はaddressにkeywordを含むrestaurant情報のみを返す
+  def self.get_mark_restaurant_info_following_onry(current_user_id, keyword = nil)
 
     restaurants = []
+    mark_restaurants = User.joins(:MarkRestaurant, :Follow).where(follows: {user_id: current_user_id}, follows:{follow_status: Follow::FOLLOW_STATUS_TYPE_FOLLOWING}).where.not(id: current_user_id).group(:gurunavi_id).average(:score)
 
     # mark_restaurantのrestaurant情報を取得し配列に格納
     mark_restaurants.each do |mark_restaurant|
@@ -66,6 +66,14 @@ class MarkRestaurant < ApplicationRecord
       restaurant = Restaurant.set_accessor(restaurant, current_user_id, current_user_id)
       restaurants << restaurant
     end
+
+    if ! (keyword.nil?)
+      restaurants = restaurants.select { |restaurant| restaurant.address.include?(keyword)}
+    else
+      # nop
+    end
+
     restaurants.sort_by{ |u| u[1]}.reverse
+    restaurants
   end
 end

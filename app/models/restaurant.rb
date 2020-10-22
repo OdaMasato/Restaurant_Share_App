@@ -98,53 +98,46 @@ class Restaurant < ApplicationRecord
   # [説　明] Restaurantオブジェクトのaccerssorに値をセットする
   def self.set_accessor_get_model_value(restaurant, user_id, current_user_id)
 
-    if user_id.nil?
-      # restaurantのgurunavi_idがMarkRestaurantテーブルに登録有無されているかどうか
-      if MarkRestaurant.exists?(gurunavi_id: restaurant.gurunavi_id)
-        MarkRestaurant.where(gurunavi_id: restaurant.gurunavi_id).average(:score)
-      else
-        restaurant.score_avg = RESTAURANT_ACCER_ZERO
-      end
-    else
-
-      # MarkRestaurant関連のアクセサを格納
-      restaurant.mark_restaurant_count = User.joins(:MarkRestaurant, :Follow).where(follows: {user_id: current_user_id}, follows:{follow_status: Follow::FOLLOW_STATUS_TYPE_FOLLOWING}, mark_restaurants: {gurunavi_id: restaurant.gurunavi_id}).count(:score)
-      if MarkRestaurant.exists?(user_id: current_user_id, gurunavi_id: restaurant.gurunavi_id)
+    restaurant.score = RESTAURANT_ACCER_ZERO
+    restaurant.score_avg = RESTAURANT_ACCER_ZERO
+    restaurant.mark_restaurant_count = RESTAURANT_ACCER_ZERO
+    restaurant.went_restaurant_count = RESTAURANT_ACCER_ZERO
+    
+    # MarkRestaurant関連のアクセサを格納
+    follows = Follow.where(user_id: current_user_id, follow_status: Follow::FOLLOW_STATUS_TYPE_FOLLOWING)
+    follows.each do |follow|
+      mark_restaurant_follow = MarkRestaurant.find_by(user_id: follow.follow_id, gurunavi_id: restaurant.gurunavi_id)
+      if ! (mark_restaurant_follow.nil?)
+        restaurant.score_avg += mark_restaurant_follow.score
         restaurant.mark_restaurant_count += 1
-        restaurant.mark_restaurant_current_user_reg = true
-      else
-        restaurant.mark_restaurant_current_user_reg = false
       end
-      
-      if MarkRestaurant.exists?(user_id: user_id, gurunavi_id: restaurant.gurunavi_id)
-        restaurant.score = MarkRestaurant.find_by(user_id: user_id, gurunavi_id: restaurant.gurunavi_id).score
-      else
-        restaurant.score = RESTAURANT_ACCER_ZERO
-      end
-
-      restaurant.score_avg = User.joins(:MarkRestaurant, :Follow).where(follows: {user_id: current_user_id}, follows:{follow_status: Follow::FOLLOW_STATUS_TYPE_FOLLOWING}, mark_restaurants: {gurunavi_id: restaurant.gurunavi_id}).sum(:score)
-      if MarkRestaurant.exists?(user_id: current_user_id, gurunavi_id: restaurant.gurunavi_id)
-        restaurant.score_avg = restaurant.score_avg + MarkRestaurant.find_by(user_id: current_user_id, gurunavi_id: restaurant.gurunavi_id).score
-        restaurant.score_avg /= restaurant.mark_restaurant_count
-      else
-        if 0 < restaurant.score_avg
-          restaurant.score_avg /= restaurant.mark_restaurant_count
-        else
-          # nop
-        end
-      end
-      
-      # WentRestaurant関連のアクセサを格納
-      restaurant.went_restaurant_count = User.joins(:WentRestaurant, :Follow).where(follows: {user_id: current_user_id}, follows:{follow_status: Follow::FOLLOW_STATUS_TYPE_FOLLOWING}, went_restaurants: {gurunavi_id: restaurant.gurunavi_id}).count(:gurunavi_id)
-      if WentRestaurant.exists?(user_id: current_user_id, gurunavi_id: restaurant.gurunavi_id)
-        restaurant.went_restaurant_count +=1
-        restaurant.went_restaurant_current_user_reg = true
-      else
-        restaurant.went_restaurant_current_user_reg = false
-      end
-
     end
 
+    current_user = MarkRestaurant.find_by(user_id: current_user_id, gurunavi_id: restaurant.gurunavi_id)
+
+    if !(current_user.nil?)
+      restaurant.score = current_user.score
+      restaurant.score_avg += current_user.score
+      restaurant.mark_restaurant_count += 1
+      restaurant.mark_restaurant_current_user_reg = true
+    else
+      restaurant.mark_restaurant_current_user_reg = false
+    end
+    restaurant.score_avg /= restaurant.mark_restaurant_count if 0 < restaurant.mark_restaurant_count
+    restaurant.score_avg = restaurant.score_avg.round(1)
+
+    # WentRestaurant関連のアクセサを格納
+    follows.each do |follow|
+      if WentRestaurant.exists?(user_id: follow.id, gurunavi_id: restaurant.gurunavi_id)
+        restaurant.went_restaurant_count += 1
+      end
+    end
+    if WentRestaurant.exists?(user_id: current_user_id, gurunavi_id: restaurant.gurunavi_id)
+      restaurant.went_restaurant_count += 1
+      restaurant.went_restaurant_current_user_reg = true 
+    else
+      restaurant.went_restaurant_current_user_reg = false
+    end
     restaurant
   end
 end

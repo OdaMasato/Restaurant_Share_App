@@ -324,25 +324,14 @@ input[type="range"] {
   background: black;
 }
 
-.user_info_basic_btn.selected-border {
-  color: white;
-  background: black;
-  vertical-align: middle;
-  text-align: center;
-  display: inline-block;
-  padding: 0.3em;
-  text-decoration: none;
-  transition: .4s;
-}
-
-.user_info_basic_btn.mark_went_restaurant-normal-border:hover {
+.user_info_basic_btn.selected {
   background: black;
   color: white;
 }
 
-.user_info_basic_btn.mark_went_restaurant-selected-border {
-  background: black;
-  color: white;
+.user_info_basic_btn.selected:hover {
+  background: white;
+  color: black;
 }
 
 .user_edit_input_field{

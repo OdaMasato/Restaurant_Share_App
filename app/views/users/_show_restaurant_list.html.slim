@@ -32,4 +32,7 @@
                 - else
                   i.far.fa-star
                 - score_tmp-=1
-              .score_text = " #{restaurant.score_avg}"
+              - if 0 < restaurant.mark_restaurant_count
+                .score_text = " #{restaurant.score}"
+              - else
+                .score_text = " -"

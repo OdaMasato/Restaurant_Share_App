@@ -21,58 +21,45 @@
         - if "mark_restaurant_list" == @disp || nil == @disp
           - @disp = "mark_restaurant_list"
           / mark_restaurant表示ボタンを選択表示
-          = link_to users_show_path(user: @user.attributes, disp: 'mark_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-selected-border', method: :get
+          = link_to users_show_path(user: @user.attributes, disp: 'mark_restaurant_list'), class: 'user_info_basic_btn selected', method: :get
             i.fas.fa-bookmark 
             br
               = "#{@mark_restaurants.count}"
         - else
           / mark_restaurant表示ボタンを通常表示
-          = link_to users_show_path(user: @user.attributes, disp: 'mark_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-normal-border', method: :get
+          = link_to users_show_path(user: @user.attributes, disp: 'mark_restaurant_list'), class: 'user_info_basic_btn', method: :get
             i.fas.fa-bookmark 
             br
               = "#{@mark_restaurants.count}"
 
         - if "went_restaurant_list" == @disp
           / went_restaurant表示ボタンを選択表示
-          = link_to users_show_path(user: @user.attributes, disp: 'went_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-selected-border', method: :get
+          = link_to users_show_path(user: @user.attributes, disp: 'went_restaurant_list'), class: 'user_info_basic_btn selected', method: :get
             i.fas.fa-eye
             br
               = "#{@went_restaurants.count}"
         - else
           / went_restaurant表示ボタンを通常表示
-          = link_to users_show_path(user: @user.attributes, disp: 'went_restaurant_list'), class: 'user_info_basic_btn mark_went_restaurant-normal-border', method: :get
+          = link_to users_show_path(user: @user.attributes, disp: 'went_restaurant_list'), class: 'user_info_basic_btn', method: :get
             i.fas.fa-eye
             br
               = "#{@went_restaurants.count}"
 
         - if "show_following_list" == @disp
           / following表示ボタンを選択表示
-          = link_to users_show_path(user: @user.attributes, disp: 'show_following_list'), class: 'user_info_basic_btn selected-border', method: :get
-            | Following
+          = link_to users_show_path(user: @user.attributes, disp: 'show_following_list'), class: 'user_info_basic_btn selected', method: :get
+            | 友達
             br
               = "#{@user.followings_count}"
         - else
           / following表示ボタンを通常表示
-          = link_to users_show_path(user: @user.attributes, disp: 'show_following_list'), class: 'user_info_basic_btn normal-border', method: :get
-            | Following
+          = link_to users_show_path(user: @user.attributes, disp: 'show_following_list'), class: 'user_info_basic_btn', method: :get
+            | 友達
             br
               = "#{@user.followings_count}"
 
-        - if "show_followers_list" == @disp
-          / followers表示ボタンを選択表示
-          = link_to users_show_path(user: @user.attributes, disp: 'show_followers_list'), class: 'user_info_basic_btn selected-border', method: :get
-            | Followers
-            br
-              = "#{@user.followers_count}"
-        - else
-          / followers表示ボタンを通常表示
-          = link_to users_show_path(user: @user.attributes, disp: 'show_followers_list'), class: 'user_info_basic_btn normal-border', method: :get
-            | Followers
-            br
-              = "#{@user.followers_count}"
-
     .row-bottom-padded-md
-      .col.pl-1
+      .col-md-12.pl-1
         - if "mark_restaurant_list" == @disp
           / mark_restaurantリストを表示
           = render partial: 'show_restaurant_list', locals: {restaurants: @mark_restaurants, disp: @disp}
@@ -85,9 +72,5 @@
           / followingリストを表示
           = render partial: 'show_follow_user_list', locals: {follows: @followings, disp: @disp}
           = paginate @followings
-        - elsif "show_followers_list" == @disp
-          / followersリストを表示
-          = render partial: 'show_follow_user_list', locals: {follows: @followers, disp: @disp}
-          = paginate @followers
         - else
           / nop
