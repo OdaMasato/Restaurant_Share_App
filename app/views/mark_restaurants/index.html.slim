@@ -1,0 +1,98 @@
+= include_gon
+#fh5co-main
+  .fh5co-narrow-content
+    h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft"  FIND RECOMEND
+    / 入力フォーム・検索ボタン
+    .animate-box data-animate-effect="fadeInLeft" 
+      .row
+        .col-md-5
+          input#address type="textbox" value='' placeholder='地名を入力してください' class='form-control'
+        .col-md-2
+          input onclick="codeAddress()" type="button" value="検索" class='btn btn-light'
+          
+    .row.row-bottom-padded-md.animate-box data-animate-effect="fadeInLeft" 
+      .col-md-12
+        / google map
+        #map.animate-box data-animate-effect="fadeInLeft"
+
+  javascript:
+    
+    let map
+    let geocoder
+    // マーカーを複数表示させたいので、配列化
+    let marker = []; 
+
+    // 吹き出しを複数表示させたいので、配列化
+    let infoWindow = [];
+
+    // コントローラーで定義したインスタンス変数を変数に代入
+    const restaurants = gon.restaurants;
+    const restaurants_attr = gon.restaurants_attr;
+
+    function initMap(){
+      // geocoderを初期化
+      geocoder = new google.maps.Geocoder()
+
+      // mapの初期位置設定
+      map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: -35.6809591, lng: 139.7673068},
+      zoom: 14
+      });
+
+      if (0 < restaurants.length)
+      {
+        // map.setCenterで地図が移動
+        map.setCenter(new google.maps.LatLng(restaurants[0].latitude, restaurants[0].longitude));
+      }
+
+      for (let i = 0; i < restaurants.length; i++)
+      {
+        marker[i] = new google.maps.Marker(
+        {
+            map: map,
+            position: new google.maps.LatLng(restaurants[i].latitude, restaurants[i].longitude)
+        });
+
+        // 変数iを変数idに代入
+        var contentString="<dl id='infowin2'><dt>"+ restaurants[i]['name'] + "</dt><dd><img src='"+ restaurants[i]['image_url'] + "' align='right' width=50 height=50 /><dd>平均評価:"+ restaurants_attr[i] + "<dd>平均予算:"+ restaurants[i]['budget'] + "円<a href='http://ja.wikipedia.org/wiki/%E3%82%B9%E3%83%95%E3%82%A3%E3%83%B3%E3%82%AF%E3%82%B9'>wikipedia</a>より。</dd></dl>";
+
+        // infoWindowは吹き出し
+        infoWindow[i] = new google.maps.InfoWindow(
+        {
+          // contentで中身を指定
+          // 今回は文字にリンクを貼り付けた形で表示
+          // content: restaurants[i]['name']
+          content: contentString
+        });
+
+        // markerがクリックされた時、
+        marker[i].addListener("click", function()
+        {
+            // infoWindowを表示
+            infoWindow[i].open(map, marker[i]);
+        });
+      }
+    }
+    
+
+    function codeAddress(){
+        // 入力を取得
+        let inputAddress = document.getElementById('address').value;
+        // geocodingしたあとmapを移動
+        geocoder.geocode( { 'address': inputAddress}, function(results, status) {
+          if (status == 'OK') {
+      　　　　　　　　　　　　// map.setCenterで地図が移動
+            map.setCenter(results[0].geometry.location);
+
+      　　　　// google.maps.MarkerでGoogleMap上の指定位置にマーカが立つ
+            var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+            });
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+    }
+
+  script async="" defer="" src="https://maps.googleapis.com/maps/api/js?key=#{@google_map_api_key}&callback=initMap" 

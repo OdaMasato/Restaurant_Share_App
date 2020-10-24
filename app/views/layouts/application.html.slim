@@ -1,5 +1,5 @@
 doctype html
-html.no-js
+html
   head
     = csrf_meta_tags
     = csp_meta_tag
@@ -50,6 +50,8 @@ html.no-js
               li
                 = link_to 'RESTAURANT', restaurants_index_path, method: :get
               li
+                = link_to 'RECOMEND MAP', mark_restaurants_index_path, method: :get
+              li
                 = link_to 'USER', users_index_path, method: :get
               li
                 = link_to 'MY PAGE', users_show_path, method: :get
@@ -61,11 +63,11 @@ html.no-js
               li
                 a href="#{new_user_registration_path}"  無料会員登録
 
-    .container
-      br
-      br
-      br
-      = yield
+  .container
+    br
+    br
+    br
+    = yield
 
 
     /! Modernizr JS

@@ -72,12 +72,17 @@ gem 'pry-rails'
 gem 'pry-doc'
 gem 'pry-byebug'
 
-# kaminariを導入する
+# kaminari(ページネーションライブラリ)を導入する
 gem 'kaminari'
 
-# font-awesome-sassを導入する
+# font-awesome-sass(アイコンセットライブラリ)を導入する
 gem 'font-awesome-sass'
 
-# carrierを導入する
+# carrier(画像アップロードライブラリ)を導入する
 gem 'carrierwave'
+
+# carrier(画像アップロードライブラリ(aws))を導入する
 gem 'carrierwave-aws'
+
+# gon(jsでrails変数を扱うためのライブラリ)を導入する
+gem "gon"

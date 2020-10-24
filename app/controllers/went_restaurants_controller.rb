@@ -15,7 +15,7 @@ class WentRestaurantsController < ApplicationController
     went_restaurant.gurunavi_id = @restaurant.gurunavi_id 
     # ☆エラー処理するのが望ましい
     went_restaurant.save!
-    redirect_to restaurants_path
+    redirect_to restaurants_index_path
   end
 
   def destroy
@@ -23,7 +23,7 @@ class WentRestaurantsController < ApplicationController
     # WentRestaurantTableのレコード削除
     went_restaurant = WentRestaurant.find_by(gurunavi_id: @restaurant.gurunavi_id, user_id: current_user.id)
     went_restaurant.destroy!
-    redirect_to restaurants_path
+    redirect_to restaurants_index_path
   end
   
   private

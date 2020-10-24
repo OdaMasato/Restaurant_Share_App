@@ -39,6 +39,8 @@ class Restaurant < ApplicationRecord
       restaurant.access_walk = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS_WALK]
       restaurant.access_note = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS_NOTE]
       restaurant.budget = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_BUDGET]
+      restaurant.latitude = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_LATITUDE]
+      restaurant.longitude = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_LONGITUDE]
 
       restaurants << restaurant
     end
@@ -67,7 +69,8 @@ class Restaurant < ApplicationRecord
     restaurant.access_walk = params[:access_walk]
     restaurant.access_note = params[:access_note]
     restaurant.budget = params[:budget]
-
+    restaurant.latitude = params[:latitude]
+    restaurant.longitude = params[:longitude]
     restaurant
   end
 

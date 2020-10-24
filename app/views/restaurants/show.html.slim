@@ -163,6 +163,9 @@
             = f.hidden_field :access_station_exit, value: @restaurant.access_station_exit
             = f.hidden_field :access_walk, value: @restaurant.access_walk
             = f.hidden_field :access_note, value: @restaurant.access_note
+            = f.hidden_field :longitude, value: @restaurant.longitude
+            = f.hidden_field :latitude, value: @restaurant.latitude
+            = f.hidden_field :budget, value: @restaurant.budget
           .modal-footer
             button.btn.btn-secondary data-dismiss="modal" type="button"  閉じる
             - if true == @restaurant.mark_restaurant_current_user_reg

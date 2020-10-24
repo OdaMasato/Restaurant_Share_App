@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_22_032248) do
+ActiveRecord::Schema.define(version: 2020_10_24_010606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,8 @@ ActiveRecord::Schema.define(version: 2020_10_22_032248) do
     t.string "access_walk"
     t.string "access_note"
     t.integer "budget"
+    t.float "latitude"
+    t.float "longitude"
     t.index ["gurunavi_id"], name: "index_restaurants_on_gurunavi_id", unique: true
   end
 
