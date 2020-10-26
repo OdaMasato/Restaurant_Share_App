@@ -192,7 +192,6 @@ input[type="range"] {
   width: 140px;
   color: black;
   text-align: center;
-  padding-left: 15px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
@@ -202,7 +201,6 @@ input[type="range"] {
 .account_name_big {
   width: 500px;
   color: black;;
-  padding-left: 15px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
@@ -214,7 +212,6 @@ input[type="range"] {
   margin-bottom: 15px;
   font-size: 10px;
   text-align: center;
-  padding-left: 15px;
   color: rgba(0, 0, 0, 0.6);
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -359,4 +356,10 @@ input[type="range"] {
 .map{
   height: 300px;
   width: 400px;
+}
+
+.dropdown-menu{
+  display: none;
+  position: relative;
+  z-index: 10;
 }

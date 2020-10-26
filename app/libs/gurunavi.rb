@@ -28,6 +28,7 @@ class Gurunavi
   GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_BUDGET = 'budget'
   GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_LATITUDE = 'latitude'
   GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_LONGITUDE = 'longitude'
+  GURUNAVI_RESTAURANT_NO_IMAGE_SRC_PATH = '/assets/no_image.jpeg'
 
   # [概　要] ぐるなびレストラン検索API フリーワード検索リクエストURL取得
   # [引　数] 検索文字列,検索結果取得件数
@@ -39,7 +40,7 @@ class Gurunavi
     gurunavi_url << get_gurunavi_keyid
     
     # 検索文字列とURLを連結
-    gurunavi_url << GURUNAVI_RESTAURANT_SEARCH_PARAM_REQ_HIT_COUNT << count.to_s
+    gurunavi_url << GURUNAVI_RESTAURANT_SEARCH_PARAM_REQ_HIT_COUNT + count.to_s
 
     word ||= ''
     gurunavi_url << GURUNAVI_RESTAURANT_SEARCH_PARAM_FREEWORD << word

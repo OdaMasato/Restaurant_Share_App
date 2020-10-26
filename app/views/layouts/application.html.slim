@@ -7,9 +7,10 @@ html
     meta charset="utf-8"
     meta content="IE=edge" http-equiv="X-UA-Compatible"
     title RECOMEND
+
     meta content="width=device-width, initial-scale=1" name="viewport"
     meta content="Free HTML5 Website Template by FreeHTML5.co" name="description"
-    meta content="free html5), free template, free bootstrap, free website template, html5, css3, mobile first, responsive" name="keywords"
+    meta content="free html5), free template, free bootstrap, free website template, html5, css3, mobile first, responsive"name="keywords"
     meta content="FreeHTML5.co" name="author"
 
     meta content="" property="og:title" /
@@ -23,8 +24,8 @@ html
     meta content="" name="twitter:card" /
 
     /! Place favicon.ico and apple-touch-icon.png in the root directory
-    link href="favicon.ico" rel=("shortcut icon") /
-    link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet" /
+    link href="favicon.ico" rel=("shortcut icon")
+    link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet"
     /! Animate.css
     = stylesheet_link_tag("ui_templates/animate", media: 'all')
     /! Icomoon Icon Fonts
@@ -47,16 +48,38 @@ html
         nav#fh5co-main-menu role="navigation" 
           ul
             - if current_user
-              li
-                = link_to 'RESTAURANT', restaurants_index_path, method: :get
-              li
-                = link_to 'RECOMEND MAP', mark_restaurants_index_path, method: :get
-              li
-                = link_to 'USER', users_index_path, method: :get
-              li
-                = link_to 'MY PAGE', users_show_path, method: :get
+
+              - if current_page?("/restaurants/index") || current_page?("/restaurants/index") 
+                li.fh5co-active
+                  = link_to 'RESTAURANT', restaurants_index_path, method: :get
+              - else
+                li
+                  = link_to 'RESTAURANT', restaurants_index_path, method: :get
+
+              - if current_page?("/mark_restaurants/index")
+                li.fh5co-active
+                  = link_to 'RECOMEND MAP', mark_restaurants_path, method: :get
+              - else
+                li
+                  = link_to 'RECOMEND MAP', mark_restaurants_path, method: :get
+              
+              - if current_page?(users_path)
+                li.fh5co-active
+                  = link_to 'USER', users_path, method: :get
+              - else
+                li
+                  = link_to 'USER', users_path, method: :get
+
+              - if current_page?(user_path(current_user.id))
+                li.fh5co-active
+                  = link_to 'MY PAGE', user_path(current_user.id), method: :get
+              - else
+                li
+                  = link_to 'MY PAGE', user_path(current_user.id), method: :get
+
               li
                 = link_to "LOGOUT", destroy_user_session_path, method: :delete
+  
             - else
               li
                 a href="#{new_user_session_path}"  ログイン

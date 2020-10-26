@@ -1,8 +1,7 @@
 class WentRestaurant < ApplicationRecord
-
   # アソシエーション
   belongs_to :user
-  belongs_to :restaurant,primary_key: 'gurunavi_id',  foreign_key: 'gurunavi_id'
+  belongs_to :restaurant, primary_key: 'gurunavi_id', foreign_key: 'gurunavi_id'
 
   # [概　要] ユーザが登録しているwent_restaurantのrestaurant情報を取得
   # [引　数] 対象のユーザID, ログイン中ユーザID

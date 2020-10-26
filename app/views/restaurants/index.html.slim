@@ -1,6 +1,6 @@
 #fh5co-main
   .fh5co-narrow-content
-    h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft"  FIND RESTAURANT
+    h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft"  RESTAURANT FIND
 
     / 入力フォーム・検索ボタン
     .animate-box data-animate-effect="fadeInLeft" 
@@ -18,7 +18,7 @@
     .row
     .row.row-bottom-padded-md.animate-box data-animate-effect="fadeInLeft" 
       .col-md-7
-        - if (!(@search.nil?)) && (!("" == @search))
+        - if (@search.present?) && (!("" == @search))
           |
             "#{@search}" で検索を行いました。
   

@@ -3,22 +3,22 @@ class RestaurantsController < ApplicationController
 
   def index
     @is_disp_filter = params[:is_disp_filter]
-    if (@is_disp_filter.nil?)
+    if @is_disp_filter.nil?
       @is_disp_filter = 'off'
     else
       # nop
     end
 
     @search = params[:search]
-    if ('off' == @is_disp_filter)
+    if 'off' == @is_disp_filter
       # FOLLOWING ONLY FILTERがOFFの場合
       # ぐるなびレストラン検索APIのフリワード検索URLを取得
-      url = Gurunavi.get_freeword_search_url(@search,Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_REQ_HIT_COUNT_DEFAULT)
+      url = Gurunavi.get_freeword_search_url(@search, Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_REQ_HIT_COUNT_DEFAULT)
 
       # フリワード検索を行い、ハッシュ化したレスポンス(json)を取得
       results = Gurunavi.get_http_res_json(url)
 
-      if !(results.nil?)
+      if results.present?
         # 取得成功の場合
         # レスポンスからRestaurant情報を取得
         @restaurants = Restaurant.get_gurunavi_params_restaurants_arg(results)
@@ -37,15 +37,21 @@ class RestaurantsController < ApplicationController
   end
 
   def show
-    @restaurant = Restaurant.get_param_restaurant(params)
+    # RestaurantTableに既に登録済みかどうか
+    if Restaurant.exists?(gurunavi_id: params[:format])
+      # 登録済みの場合
+      @restaurant = Restaurant.find_by(gurunavi_id: params[:format])
+    else
+      # 上記以外の場合
+      @restaurant = Restaurant.get_param_restaurant(params)
+    end
     @restaurant = Restaurant.set_accessor(@restaurant, current_user.id, current_user.id)
-    
+
     @follows = []
-    
-    mark_restaurant_users = User.joins(:MarkRestaurant, :Follow).where(follows: {user_id: current_user.id}, follows:{follow_status: Follow::FOLLOW_STATUS_TYPE_FOLLOWING}).where(mark_restaurants: {gurunavi_id: @restaurant.gurunavi_id}).distinct
+
+    mark_restaurant_users = User.joins(:MarkRestaurant, :Follow).where(follows: { user_id: current_user.id }, follows: { follow_status: Follow::FOLLOW_STATUS_TYPE_FOLLOWING }).where(mark_restaurants: { gurunavi_id: @restaurant.gurunavi_id }).distinct
 
     mark_restaurant_users.each do |mark_restaurant_user|
-      user = User.new
       user = User.get_user_info(mark_restaurant_user.id, current_user.id)
       user.evaluated_restaurant_score = MarkRestaurant.find_by(user_id: mark_restaurant_user.id, gurunavi_id: @restaurant.gurunavi_id).score
       @follows << user

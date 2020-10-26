@@ -1,6 +1,6 @@
 #fh5co-main
   .fh5co-narrow-content
-    h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft"  FIND RESTAURANT
+    h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft"  RESTAURANT FIND
 
     .row.animate-box data-animate-effect="fadeInLeft"
       .col
@@ -81,10 +81,10 @@
 
             / 行きたいお店ボタン
             - if @restaurant.went_restaurant_current_user_reg
-              = link_to went_restaurants_destroy_path(@restaurant.attributes), class: 'mark_went_restaurant_btn selected-border', method: :post
+              = link_to went_restaurant_path(@restaurant.gurunavi_id), class: 'mark_went_restaurant_btn selected-border', method: :delete
                 i.fas.fa-eye = " #{@restaurant.went_restaurant_count}"
             - else
-              = link_to went_restaurants_create_path(@restaurant.attributes), class: 'mark_went_restaurant_btn normal-border', method: :post
+              = link_to went_restaurants_path(@restaurant.attributes), class: 'mark_went_restaurant_btn normal-border', method: :post
                 i.fas.fa-eye = " #{@restaurant.went_restaurant_count}"
 
             = link_to "ぐるなび", @restaurant.gurunavi_url, class: 'gurunavi_btn normal-border'
@@ -101,16 +101,16 @@
         .row-bottom-padded-md.col-md-4.animate-box data-animate-effect="fadeInLeft"
           .col-md-12.pb-5
             - if follow.image.file.nil?
-              = link_to users_show_path(user: follow.attributes, disp: 'mark_restaurant_list')
+              = link_to user_path(follow), disp: 'mark_restaurant_list'
                 img src="/assets/profile_image_default.jpeg" class="account_img" alt="no image"
             - else
-              = link_to users_show_path(user: follow.attributes, disp: 'mark_restaurant_list')
+              = link_to user_path(follow), disp: 'mark_restaurant_list'
                 = image_tag(follow.image.to_s, size: 75, class: "account_img")
 
           .col-md-12
             .row
               h3
-                a.account_name href="#{users_show_path(user: follow.attributes, disp: 'mark_restaurant_list')}"  #{follow.account_name}
+                = link_to "#{follow.account_name}", user_path(follow), disp: 'mark_restaurant_list', class: 'account_name'
 
             .row
               .account_id = "@#{follow.account_id}"
@@ -139,11 +139,13 @@
         button.close aria-label="Close" data-dismiss="modal" type="button" 
           span aria-hidden="true"  &times;
       - if true == @restaurant.mark_restaurant_current_user_reg
-        - url = 'mark_restaurants_update_path'
+        - url = 'mark_restaurant_path(@restaurant.gurunavi_id)'
+        - method = ':patch'
       - else
-        - url = 'mark_restaurants_create_path'
+        - url = 'mark_restaurants_path'
+        - method = ':post'
       
-      = form_with url: eval(url), local: true do |f|
+      = form_with url: eval(url), method: eval(method), local: true do |f|
         .form-group
           .modal-body
             h4.span#value ="#{@restaurant.score}"
@@ -169,9 +171,8 @@
           .modal-footer
             button.btn.btn-secondary data-dismiss="modal" type="button"  閉じる
             - if true == @restaurant.mark_restaurant_current_user_reg
-              = link_to '削除', mark_restaurants_destroy_path(@restaurant.attributes), class: 'btn btn-danger', method: :post
+              = link_to '削除', mark_restaurant_path(@restaurant.gurunavi_id), class: 'btn btn-danger', method: :delete
             = f.submit '保存', class: 'btn btn-primary'
-
 
 / ModalWindow実現用JavaScript
 /! Optional JavaScript

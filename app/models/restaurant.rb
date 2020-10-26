@@ -1,10 +1,9 @@
 class Restaurant < ApplicationRecord
-
   validates :gurunavi_id, uniqueness: true
 
   # アソシエーション
-  has_many :MarkRestaurant,primary_key: 'gurunavi_id', foreign_key: 'gurunavi_id'
-  has_many :WentRestaurant,primary_key: 'gurunavi_id', foreign_key: 'gurunavi_id'
+  has_many :MarkRestaurant, primary_key: 'gurunavi_id', foreign_key: 'gurunavi_id'
+  has_many :WentRestaurant, primary_key: 'gurunavi_id', foreign_key: 'gurunavi_id'
   has_many :User, through: :MarkRestaurant
 
   # 定数
@@ -34,13 +33,17 @@ class Restaurant < ApplicationRecord
       restaurant.tel = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_NAME_TEL]
       restaurant.gurunavi_url = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_URL]
       restaurant.access_line = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS_LINE]
-      restaurant.access_station = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS_STATION ]
+      restaurant.access_station = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS_STATION]
       restaurant.access_station_exit = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS_STATION_EXIT]
       restaurant.access_walk = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS_WALK]
       restaurant.access_note = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS][Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_ACCESS_NOTE]
       restaurant.budget = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_BUDGET]
       restaurant.latitude = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_LATITUDE]
       restaurant.longitude = param[Gurunavi::GURUNAVI_RESTAURANT_SEARCH_PARAM_GURUNAVI_LONGITUDE]
+
+      if restaurant.image_url.blank?
+        restaurant.image_url = Gurunavi::GURUNAVI_RESTAURANT_NO_IMAGE_SRC_PATH
+      end
 
       restaurants << restaurant
     end
@@ -74,14 +77,12 @@ class Restaurant < ApplicationRecord
     restaurant
   end
 
-  private
-
   # [概　要] Restaurantオブジェクトのaccessorに値を代入する
   # [引　数] Restaurantオブジェクト(配列 or 単体), 対象のユーザID、ログイン中ユーザID
   # [戻り値] Restaurant配列
   # [説　明] Restaurantオブジェクトのscoreにmark_restaurantのscore平均をセットする
   def self.set_accessor(restaurant_org, user_id = nil, current_user_id = user_id)
-    if Array == restaurant_org.class 
+    if Array == restaurant_org.class
       # 引数が配列型の場合
       restaurants = []
       restaurant_org.each do |restaurant|
@@ -105,21 +106,26 @@ class Restaurant < ApplicationRecord
     restaurant.score_avg = RESTAURANT_ACCER_ZERO
     restaurant.mark_restaurant_count = RESTAURANT_ACCER_ZERO
     restaurant.went_restaurant_count = RESTAURANT_ACCER_ZERO
-    
+
     # MarkRestaurant関連のアクセサを格納
     follows = Follow.where(user_id: current_user_id, follow_status: Follow::FOLLOW_STATUS_TYPE_FOLLOWING)
     follows.each do |follow|
       mark_restaurant_follow = MarkRestaurant.find_by(user_id: follow.follow_id, gurunavi_id: restaurant.gurunavi_id)
-      if ! (mark_restaurant_follow.nil?)
+      unless mark_restaurant_follow.nil?
         restaurant.score_avg += mark_restaurant_follow.score
         restaurant.mark_restaurant_count += 1
       end
     end
 
+    target_user = MarkRestaurant.find_by(user_id: user_id, gurunavi_id: restaurant.gurunavi_id)
+
+    if target_user.present?
+      restaurant.score = target_user.score
+    end
+
     current_user = MarkRestaurant.find_by(user_id: current_user_id, gurunavi_id: restaurant.gurunavi_id)
 
-    if !(current_user.nil?)
-      restaurant.score = current_user.score
+    if current_user.present?
       restaurant.score_avg += current_user.score
       restaurant.mark_restaurant_count += 1
       restaurant.mark_restaurant_current_user_reg = true
@@ -137,7 +143,7 @@ class Restaurant < ApplicationRecord
     end
     if WentRestaurant.exists?(user_id: current_user_id, gurunavi_id: restaurant.gurunavi_id)
       restaurant.went_restaurant_count += 1
-      restaurant.went_restaurant_current_user_reg = true 
+      restaurant.went_restaurant_current_user_reg = true
     else
       restaurant.went_restaurant_current_user_reg = false
     end

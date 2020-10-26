@@ -6,17 +6,17 @@ class User < ApplicationRecord
   # , :confirmable
 
   # アソシエーション
-  has_many :MarkRestaurant,foreign_key: 'user_id'
+  has_many :MarkRestaurant, foreign_key: 'user_id'
   has_many :Restaurant, through: :MarkRestaurant
 
-  has_many :WentRestaurant,foreign_key: 'user_id'
+  has_many :WentRestaurant, foreign_key: 'user_id'
   has_many :Restaurant, through: :WentRestaurant
-  has_many :Follow,foreign_key: 'user_id'
+  has_many :Follow, foreign_key: 'user_id'
 
   mount_uploader :image, ImageUploader
 
   # accessor
-  attr_accessor :followings_count ,:followers_count, :is_current_user_following, :evaluated_restaurant_score
+  attr_accessor :followings_count, :followers_count, :is_current_user_following, :evaluated_restaurant_score
 
   # [概　要] ユーザ情報を取得
   # [引　数] 対象のユーザID
@@ -34,13 +34,13 @@ class User < ApplicationRecord
   def self.set_accessor(user_info, current_user_id)
     follow = Follow.find_by(user_id: current_user_id, follow_id: user_info.id)
 
-    if user_info.id == current_user_id
-      user_info.is_current_user_following = Follow::FOLLOW_STATUS_TYPE_MYSELF
-    elsif follow.nil?
-      user_info.is_current_user_following = Follow::FOLLOW_STATUS_TYPE_NON_FOLLOWING      
-    else
-      user_info.is_current_user_following = follow.follow_status
-    end
+    user_info.is_current_user_following = if user_info.id == current_user_id
+                                            Follow::FOLLOW_STATUS_TYPE_MYSELF
+                                          elsif follow.nil?
+                                            Follow::FOLLOW_STATUS_TYPE_NON_FOLLOWING
+                                          else
+                                            follow.follow_status
+                                          end
 
     user_info.followings_count = Follow.where(user_id: user_info, follow_status: Follow::FOLLOW_STATUS_TYPE_FOLLOWING).count
     user_info.followers_count = Follow.where(follow_id: user_info, follow_status: Follow::FOLLOW_STATUS_TYPE_FOLLOWING).count

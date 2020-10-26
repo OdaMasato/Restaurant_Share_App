@@ -14,46 +14,68 @@
         .col-12
           h5.account_id_big = "@#{@user.account_id}"
         .col-12
-          = link_to 'アカウント編集', edit_user_registration_path, class: 'user_setting_btn'
+          - if current_user.id == @user.id
+            = link_to 'アカウント編集', edit_user_registration_path, class: 'user_setting_btn', method: :get
+          - else
+              - if -1 == @user.is_current_user_following
+                /nop 
+              - elsif 0 == @user.is_current_user_following
+                = link_to follows_path(id: @user), class: 'follow_btn', method: :post
+                  i.fas.fa-user-check
+                  |  友達になる
+              - elsif 1 == @user.is_current_user_following
+                = link_to follow_path(id: @user), class: 'follow_btn following', method: :delete
+                  i.fas.fa-user-check 
+                  |  友達　　
+              - elsif 2 == @user.is_current_user_following
+                = link_to follow_path(id: @user), class: 'follow_btn following', method: :delete
+                  i.fas.fa-user-plus
+                  |  友達リクエスト中
+              - elsif 3 == @user.is_current_user_following
+                = link_to follow_path(id: @user), class: 'follow_btn', method: :patch
+                  i.fas.fa-user-plus
+                  |  承認
+              - else
+                / nop
 
     .row-bottom-padded-md
       .col-md-12.pb-5
         - if "mark_restaurant_list" == @disp || nil == @disp
           - @disp = "mark_restaurant_list"
           / mark_restaurant表示ボタンを選択表示
-          = link_to users_show_path(user: @user.attributes, disp: 'mark_restaurant_list'), class: 'user_info_basic_btn selected', method: :get
+          = link_to user_path(@user,disp: 'mark_restaurant_list'), class: 'user_info_basic_btn selected', method: :get
             i.fas.fa-bookmark 
             br
               = "#{@mark_restaurants.count}"
         - else
           / mark_restaurant表示ボタンを通常表示
-          = link_to users_show_path(user: @user.attributes, disp: 'mark_restaurant_list'), class: 'user_info_basic_btn', method: :get
+          = link_to user_path(@user, disp: 'mark_restaurant_list'), class: 'user_info_basic_btn', method: :get
             i.fas.fa-bookmark 
             br
               = "#{@mark_restaurants.count}"
 
         - if "went_restaurant_list" == @disp
           / went_restaurant表示ボタンを選択表示
-          = link_to users_show_path(user: @user.attributes, disp: 'went_restaurant_list'), class: 'user_info_basic_btn selected', method: :get
+          = link_to user_path(@user, disp: 'went_restaurant_list'), class: 'user_info_basic_btn selected', method: :get
             i.fas.fa-eye
             br
               = "#{@went_restaurants.count}"
         - else
           / went_restaurant表示ボタンを通常表示
-          = link_to users_show_path(user: @user.attributes, disp: 'went_restaurant_list'), class: 'user_info_basic_btn', method: :get
+          = link_to user_path(@user, disp: 'went_restaurant_list'), class: 'user_info_basic_btn', method: :get
             i.fas.fa-eye
             br
               = "#{@went_restaurants.count}"
 
         - if "show_following_list" == @disp
           / following表示ボタンを選択表示
-          = link_to users_show_path(user: @user.attributes, disp: 'show_following_list'), class: 'user_info_basic_btn selected', method: :get
+          = link_to user_path(@user, disp: 'show_following_list'), class: 'user_info_basic_btn selected', method: :get
             | 友達
             br
               = "#{@user.followings_count}"
         - else
           / following表示ボタンを通常表示
-          = link_to users_show_path(user: @user.attributes, disp: 'show_following_list'), class: 'user_info_basic_btn', method: :get
+          = link_to user_path(@user, disp: 'show_following_list'), class: 'user_info_basic_btn', method: :get
             | 友達
             br
               = "#{@user.followings_count}"

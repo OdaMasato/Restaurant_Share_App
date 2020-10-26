@@ -1,5 +1,4 @@
 class PagesController < ApplicationController
-
   # 定数
   HOME_DISP_POPULAR_RESTAURANT_NUM = 4
 

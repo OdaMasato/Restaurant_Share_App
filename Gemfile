@@ -68,9 +68,9 @@ gem 'bootstrap'
 gem 'devise'
 
 # pry-hoge(デバッグ用ライブラリ)を導入する
-gem 'pry-rails'
-gem 'pry-doc'
 gem 'pry-byebug'
+gem 'pry-doc'
+gem 'pry-rails'
 
 # kaminari(ページネーションライブラリ)を導入する
 gem 'kaminari'
@@ -84,5 +84,11 @@ gem 'carrierwave'
 # carrier(画像アップロードライブラリ(aws))を導入する
 gem 'carrierwave-aws'
 
-# gon(jsでrails変数を扱うためのライブラリ)を導入する
-gem "gon"
+# gon(js0でrails変数を扱うためのライブラリ)を導入する
+gem 'gon'
+
+# rubocop(構文の静的解析ツール)を導入する
+gem 'rubocop', require: false
+gem 'rubocop-performance', require: false
+gem 'rubocop-rails', require: false
+gem 'rubocop-rspec'
