@@ -83,7 +83,7 @@
         });
         
         // 変数iを変数idに代入
-        var contentString="<dl id='infowin2'><dt>"+ restaurants[i]['name'] + "</dt><dd><img src='"+ restaurants[i]['image_url'] + "' align='right' width=50 height=50 /><dd>平均評価:"+ restaurants_attr[i] + "<dd>平均予算:"+ restaurants[i]['budget'] + "円 <dd><a href='/restaurants/show."+ restaurants[i]['gurunavi_id'] + "'>詳細はこちら</a></dd></dl>";
+        var contentString="<dl id='infowin2'><dt>"+ restaurants[i]['name'] + "　　　　　　　　　</dt><dd><img src='"+ restaurants[i]['image_url'] + "' align='right' width=50 height=50 /><dd>平均評価:"+ restaurants_attr[i] + "<dd>平均予算:"+ restaurants[i]['budget'] + "円 <dd><a href='/restaurants/show."+ restaurants[i]['gurunavi_id'] + "'>詳細はこちら</a></dd></dl>";
 
         // infoWindowは吹き出し
         infoWindow[i] = new google.maps.InfoWindow(

@@ -14,8 +14,8 @@
         .col-12
           h5.account_id_big = "@#{@user.account_id}"
         .col-12
-          - if current_user.id == @user.account_id
-            - if 'guest' != @user.id
+          - if current_user.account_id == @user.account_id
+            - if ! ('guest' == @user.account_id)
               = link_to 'アカウント編集', edit_user_registration_path, class: 'user_setting_btn', method: :get
           - else
               - if -1 == @user.is_current_user_following
@@ -25,9 +25,14 @@
                   i.fas.fa-user-check
                   |  友達になる
               - elsif 1 == @user.is_current_user_following
-                = link_to follow_path(id: @user), class: 'follow_btn following', method: :delete
-                  i.fas.fa-user-check 
-                  |  友達　　
+                - if ('todamasao' == @user.account_id) && ('guest' == current_user.account_id)
+                  = link_to follow_path(id: @user), class: 'follow_btn following disabled', method: :delete, disabled: true
+                    i.fas.fa-user-check 
+                    |  友達　
+                - else
+                  = link_to follow_path(id: @user), class: 'follow_btn following', method: :delete
+                    i.fas.fa-user-check 
+                    |  友達　　
               - elsif 2 == @user.is_current_user_following
                 = link_to follow_path(id: @user), class: 'follow_btn following', method: :delete
                   i.fas.fa-user-plus
@@ -86,14 +91,19 @@
         - if "mark_restaurant_list" == @disp
           / mark_restaurantリストを表示
           = render partial: 'show_restaurant_list', locals: {restaurants: @mark_restaurants, disp: @disp}
-          = paginate @mark_restaurants
+          - paginate_arg = @mark_restaurants
         - elsif "went_restaurant_list" == @disp
           / went_restaurantリストを表示
           = render partial: 'show_restaurant_list', locals: {restaurants: @went_restaurants, disp: @disp}
-          = paginate @went_restaurants
+          - paginate_arg = @went_restaurants
         - elsif "show_following_list" == @disp
           / followingリストを表示
           = render partial: 'show_follow_user_list', locals: {follows: @followings, disp: @disp}
-          = paginate @followings
+          - paginate_arg = @followings
         - else
           / nop
+
+    .row.row-bottom-padded-md
+      .col.animate-box data-animate-effect="fadeInLeft" = paginate paginate_arg
+    / ☆ページネーション表示用
+    .row.row-bottom-padded-md

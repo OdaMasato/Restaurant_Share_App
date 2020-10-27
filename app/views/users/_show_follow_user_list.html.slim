@@ -29,9 +29,14 @@
                       i.fas.fa-user-check
                       |  友達になる
                   - elsif 1 == follow.is_current_user_following
-                    = link_to follow_path(id: follow), class: 'follow_btn following', method: :delete
-                      i.fas.fa-user-check 
-                      |  友達　　
+                    - if ('todamasao' == follow.account_id) && ('guest' == current_user.account_id)
+                      = link_to follow_path(id: follow), class: 'follow_btn following disabled', method: :delete, disabled: true
+                        i.fas.fa-user-check 
+                        |  友達　
+                    - else
+                      = link_to follow_path(id: follow), class: 'follow_btn following', method: :delete
+                        i.fas.fa-user-check 
+                        |  友達　　
                   - elsif 2 == follow.is_current_user_following
                     = link_to follow_path(id: follow), class: 'follow_btn following', method: :delete
                       i.fas.fa-user-plus

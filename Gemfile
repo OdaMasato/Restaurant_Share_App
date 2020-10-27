@@ -31,6 +31,12 @@ gem 'bootsnap', '>= 1.4.2', require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  # rspec(テストライブラリ)を導入する
+  gem 'rspec-rails'
+  # factorybot(テストデータ作成支援絵ライブラリ)を導入する
+  gem 'factory_bot_rails'
+  # webmock(テスト時に仮想サーバとしてレスポンスを返すライブラリ)を導入する
+  gem 'webmock'
 end
 
 group :development do
@@ -84,7 +90,7 @@ gem 'carrierwave'
 # carrier(画像アップロードライブラリ(aws))を導入する
 gem 'carrierwave-aws'
 
-# gon(js0でrails変数を扱うためのライブラリ)を導入する
+# gon(jsでrails変数を扱うためのライブラリ)を導入する
 gem 'gon'
 
 # rubocop(構文の静的解析ツール)を導入する

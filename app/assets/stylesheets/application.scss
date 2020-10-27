@@ -287,6 +287,10 @@ input[type="range"] {
   transition: .4s;
   border-radius: 2px;
 }
+.follow_btn.following.disabled {
+  pointer-events: none;
+}
+
 .follow_btn:hover {
   color: white;
   background: gray;

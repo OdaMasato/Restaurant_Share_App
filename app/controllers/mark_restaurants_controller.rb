@@ -6,6 +6,7 @@ class MarkRestaurantsController < ApplicationController
     @google_map_api_key = Rails.application.credentials.dig(:google_map, :api_key)
     @restaurants = WentRestaurant.get_went_restaurant_info(current_user.id, current_user.id)
     @restaurants.push(MarkRestaurant.get_mark_restaurant_info_following_onry(current_user.id, ''))
+    @restaurants.push(MarkRestaurant.get_mark_restaurant_info(current_user.id, current_user.id))
     @restaurants.flatten!
 
     # is_disp_filterに0以外の数値が入力されている場合、
