@@ -1,4 +1,4 @@
-FactroyBot.define do
+FactoryBot.define do
   factory :user do
     account_name{ 'テストユーザー'}
     account_id{ 'test1'}
