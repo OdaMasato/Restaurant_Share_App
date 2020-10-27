@@ -163,6 +163,7 @@ input[type="range"] {
 .account_img {
   width: 120px;
   height: 120px;
+  margin-left: 10px;
   border-radius: 50%;
   border: solid 1px whitesmoke;
   -webkit-transform: scale(1.2);
@@ -358,8 +359,15 @@ input[type="range"] {
   width: 400px;
 }
 
-.dropdown-menu{
+.score_average_filter_btn{
   display: none;
   position: relative;
   z-index: 10;
+}
+
+.restaurant_img {
+  width: 250px;
+  height: 250px;
+  border-radius: 2px;
+  border: solid 1px whitesmoke;
 }

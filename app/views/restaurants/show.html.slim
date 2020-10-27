@@ -90,7 +90,7 @@
             = link_to "ぐるなび", @restaurant.gurunavi_url, class: 'gurunavi_btn normal-border'
 
       .col-md-4
-        = image_tag(@restaurant.image_url)
+        = image_tag @restaurant.image_url, class: 'restaurant_img'
 
 #fh5co-main
   .fh5co-narrow-content
@@ -102,7 +102,7 @@
           .col-md-12.pb-5
             - if follow.image.file.nil?
               = link_to user_path(follow), disp: 'mark_restaurant_list'
-                img src="/assets/profile_image_default.jpeg" class="account_img" alt="no image"
+                = image_tag "/assets/profile_image_default.jpeg", class: "account_img", size: 75
             - else
               = link_to user_path(follow), disp: 'mark_restaurant_list'
                 = image_tag(follow.image.to_s, size: 75, class: "account_img")

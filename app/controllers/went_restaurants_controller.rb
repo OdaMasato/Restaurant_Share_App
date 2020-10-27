@@ -3,7 +3,7 @@ class WentRestaurantsController < ApplicationController
   def create
     # RestaurantTableに同一IDのレコードが存在しない場合、restaurantを登録する
     if !(Restaurant.exists?(gurunavi_id: params[:gurunavi_id]))
-      @restaurant = get_param_restaurant(params)
+      @restaurant = Restaurant.get_param_restaurant(params)
       @restaurant.save!
     else
       # nop

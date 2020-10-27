@@ -14,8 +14,9 @@
         .col-12
           h5.account_id_big = "@#{@user.account_id}"
         .col-12
-          - if current_user.id == @user.id
-            = link_to 'アカウント編集', edit_user_registration_path, class: 'user_setting_btn', method: :get
+          - if current_user.id == @user.account_id
+            - if 'guest' != @user.id
+              = link_to 'アカウント編集', edit_user_registration_path, class: 'user_setting_btn', method: :get
           - else
               - if -1 == @user.is_current_user_following
                 /nop 

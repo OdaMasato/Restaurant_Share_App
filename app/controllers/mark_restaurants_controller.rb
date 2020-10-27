@@ -5,21 +5,25 @@ class MarkRestaurantsController < ApplicationController
 
     @google_map_api_key = Rails.application.credentials.dig(:google_map, :api_key)
     @restaurants = WentRestaurant.get_went_restaurant_info(current_user.id, current_user.id)
-    mark_restaurants = MarkRestaurant.get_mark_restaurant_info_following_onry(current_user.id, '') 
+    @restaurants.push(MarkRestaurant.get_mark_restaurant_info_following_onry(current_user.id, ''))
+    @restaurants.flatten!
 
     # is_disp_filterに0以外の数値が入力されている場合、
     # is_disp_filterよりもscore_avgが小さいrestaurant情報を削除する
     if 0 < @is_disp_filter
-      mark_restaurants.select!{|e| e.score_avg >= @is_disp_filter}
+      @restaurants.select!{|e| e.score_avg >= @is_disp_filter}
     end
 
-    @restaurants.push(mark_restaurants)
-    @restaurants.flatten!
     gon.restaurants = @restaurants.uniq
 
     restaurants_attr = []
     @restaurants.each do |restaurant|
-      restaurants_attr << restaurant.score_avg
+      if 0 == restaurant.mark_restaurant_count
+        restaurants_attr << '-'
+      else
+        restaurants_attr << restaurant.score_avg
+      end
+      
     end
     gon.restaurants_attr = restaurants_attr
   end

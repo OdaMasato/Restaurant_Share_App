@@ -56,7 +56,7 @@ html
                 li
                   = link_to 'RESTAURANT', restaurants_index_path, method: :get
 
-              - if current_page?("/mark_restaurants/index")
+              - if current_page?(mark_restaurants_path)
                 li.fh5co-active
                   = link_to 'RECOMEND MAP', mark_restaurants_path, method: :get
               - else

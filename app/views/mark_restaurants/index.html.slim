@@ -14,7 +14,7 @@
         .col-md-7
         .col-md-3.pl-5.pr-0
           .filter_descript_text
-            | SCORE AVG FILTER
+            | Score Averege Filter
         .col-md-2.pb-2.pl-2
           .dropdown
             - if 0 == @is_disp_filter
@@ -32,7 +32,7 @@
             - else
               .dropdownMenuLink.btn.btn-danger.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" href="#" role="button" style="display :block"
                 | 4.0以上
-            .dropdown-menu aria-labelledby="dropdownMenuLink"
+            .score_average_filter_btn.dropdown-menu aria-labelledby="dropdownMenuLink"
               = link_to "OFF", mark_restaurants_path(is_disp_filter: 0), class: 'dropdown-item', method: 'get'
               = link_to "1.0以上", mark_restaurants_path(is_disp_filter: 1), class: 'dropdown-item', method: 'get'
               = link_to "2.0以上", mark_restaurants_path(is_disp_filter: 2), class: 'dropdown-item', method: 'get'
@@ -64,7 +64,7 @@
 
       // mapの初期位置設定
       map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: -35.6809591, lng: 139.7673068},
+      center: {lat: 35.6809591, lng: 139.7673068},
       zoom: 14
       });
 
