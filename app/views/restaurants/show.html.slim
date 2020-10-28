@@ -1,0 +1,192 @@
+#fh5co-main
+  .fh5co-narrow-content
+    h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft"  RESTAURANT FIND
+
+    .row.animate-box data-animate-effect="fadeInLeft"
+      .col
+        / 店舗名
+        .restaurant_name = "#{@restaurant.name}"
+
+        / アクセス
+        .access_text = "#{@restaurant.category}　""#{@restaurant.access_station}から徒歩#{@restaurant.access_walk}分"
+
+    .row.animate-box data-animate-effect="fadeInLeft"
+      .col-md-8
+
+        / 平均評価
+        .row.score
+          .col-md-2 平均評価　
+          .col-md-10
+            / 評価平均
+            .score_icon
+              - score_tmp = @restaurant.score_avg
+              - for i in (1..5) do
+                - if (0 < score_tmp)
+                  - if (1 <= score_tmp)
+                    i.fas.fa-star
+                  - else
+                    i.fas.fa-star-half-alt
+                - else
+                  i.far.fa-star
+                - score_tmp-=1
+              - if 0 < @restaurant.mark_restaurant_count
+                .score_text = " #{@restaurant.score_avg}"
+              - else
+                .score_text = " -"
+
+        / PR文
+        .row
+          .col-md-12
+            .restaurant_info_pr_text = "#{@restaurant.pr_short}"
+
+        / 平均予算
+        .row
+          .col-md-2 平均予算　
+          .col-md-10
+            .restaurant_info_text = "#{@restaurant.budget}円"
+
+        / 定休日
+        .row
+          .col-md-2 定休日　　
+          .col-md-10
+            .restaurant_info_text = "#{@restaurant.holiday}"
+
+        / 営業時間
+        .row
+          .col-md-2 営業時間　
+          .col-md-10
+            .restaurant_info_text = "#{@restaurant.opentime}"
+
+        / 住所
+        .row
+          .col-md-2 住所　　　
+          .col-md-10
+            .restaurant_info_text = "#{@restaurant.address}"
+
+        / 電話番号
+        .row
+          .col-md-2 電話番号　
+          .col-md-10
+            .restaurant_info_text = "#{@restaurant.tel}"
+
+        .row
+          .col
+            / 行ったお店ボタン
+            - if @restaurant.mark_restaurant_current_user_reg
+              button.mark_went_restaurant_btn.selected-border data-target="#markRestaurantModal" data-toggle="modal" type="button" 
+                i.fas.fa-bookmark = " #{@restaurant.mark_restaurant_count}"
+            - else
+              button.mark_went_restaurant_btn.normal-border data-target="#markRestaurantModal" data-toggle="modal" type="button" 
+                i.fas.fa-bookmark = " #{@restaurant.mark_restaurant_count}"
+
+            / 行きたいお店ボタン
+            - if @restaurant.went_restaurant_current_user_reg
+              = link_to went_restaurant_path(@restaurant.gurunavi_id), class: 'mark_went_restaurant_btn selected-border', method: :delete
+                i.fas.fa-eye = " #{@restaurant.went_restaurant_count}"
+            - else
+              = link_to went_restaurants_path(@restaurant.attributes), class: 'mark_went_restaurant_btn normal-border', method: :post
+                i.fas.fa-eye = " #{@restaurant.went_restaurant_count}"
+
+            = link_to "ぐるなび", @restaurant.gurunavi_url, class: 'gurunavi_btn normal-border'
+
+      .col-md-4
+        = image_tag @restaurant.image_url, class: 'restaurant_img'
+
+#fh5co-main
+  .fh5co-narrow-content
+    - if !(@follows.empty?)
+      .row.row-bottom-padded-md
+      h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft"  EVALUATION USER
+      - @follows.each do |follow|
+        .row-bottom-padded-md.col-md-4.animate-box data-animate-effect="fadeInLeft"
+          .col-md-12.pb-5
+            - if follow.image.file.nil?
+              = link_to user_path(follow), disp: 'mark_restaurant_list'
+                = image_tag "/assets/profile_image_default.jpeg", class: "account_img", size: 75
+            - else
+              = link_to user_path(follow), disp: 'mark_restaurant_list'
+                = image_tag(follow.image.to_s, size: 75, class: "account_img")
+
+          .col-md-12
+            .row
+              h3
+                = link_to "#{follow.account_name}", user_path(follow), disp: 'mark_restaurant_list', class: 'account_name'
+
+            .row
+              .account_id = "@#{follow.account_id}"
+
+            .row.evaluation_main
+              / 評価
+              - if follow.evaluated_restaurant_score
+                - score_tmp = follow.evaluated_restaurant_score
+                - for i in (1..5) do
+                  - if (0 < score_tmp)
+                    - if (1 <= score_tmp)
+                      i.fas.fa-star
+                    - else
+                      i.fas.fa-star-half-alt
+                  - else
+                    i.far.fa-star
+                  - score_tmp-=1
+                .score_text = " #{follow.evaluated_restaurant_score}"
+
+
+#markRestaurantModal.modal.fade aria-hidden="true" aria-labelledby="wentTitle" role="dialog" tabindex="-1" 
+  .modal-dialog.modal-dialog-centered role="document" 
+    .modal-content
+      .modal-header
+        h4.modal-title RESTAURANT SCORE
+        button.close aria-label="Close" data-dismiss="modal" type="button" 
+          span aria-hidden="true"  &times;
+      - if true == @restaurant.mark_restaurant_current_user_reg
+        - url = 'mark_restaurant_path(@restaurant.gurunavi_id)'
+        - method = ':patch'
+      - else
+        - url = 'mark_restaurants_path'
+        - method = ':post'
+      
+      = form_with url: eval(url), method: eval(method), local: true do |f|
+        .form-group
+          .modal-body
+            h4.span#value ="#{@restaurant.score}"
+            = f.range_field :score , max: 5, min: 0, step: 0.5, type: "range", value: "#{@restaurant.score}", id: "range", size: "500"
+            = f.hidden_field :gurunavi_id, value: @restaurant.gurunavi_id
+            = f.hidden_field :category, value: @restaurant.category
+            = f.hidden_field :name, value: @restaurant.name
+            = f.hidden_field :address, value: @restaurant.address
+            = f.hidden_field :image_url, value: @restaurant.image_url
+            = f.hidden_field :opentime, value: @restaurant.opentime
+            = f.hidden_field :holiday, value: @restaurant.holiday
+            = f.hidden_field :pr_short, value: @restaurant.pr_short
+            = f.hidden_field :tel, value: @restaurant.tel
+            = f.hidden_field :gurunavi_url, value: @restaurant.gurunavi_url
+            = f.hidden_field :access_line, value: @restaurant.access_line
+            = f.hidden_field :access_station, value: @restaurant.access_station
+            = f.hidden_field :access_station_exit, value: @restaurant.access_station_exit
+            = f.hidden_field :access_walk, value: @restaurant.access_walk
+            = f.hidden_field :access_note, value: @restaurant.access_note
+            = f.hidden_field :longitude, value: @restaurant.longitude
+            = f.hidden_field :latitude, value: @restaurant.latitude
+            = f.hidden_field :budget, value: @restaurant.budget
+          .modal-footer
+            button.btn.btn-secondary data-dismiss="modal" type="button"  閉じる
+            - if true == @restaurant.mark_restaurant_current_user_reg
+              = link_to '削除', mark_restaurant_path(@restaurant.gurunavi_id), class: 'btn btn-danger', method: :delete
+            = f.submit '保存', class: 'btn btn-primary'
+
+/ ModalWindow実現用JavaScript
+/! Optional JavaScript
+/! jQuery first, then Popper.js, then Bootstrap JS
+script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
+script crossorigin="anonymous" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" 
+script crossorigin="anonymous" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" 
+
+javascript:
+  var elem = document.getElementById('range');
+  var target = document.getElementById('value');
+  var rangeValue = function (elem, target) {
+    return function(evt){
+      target.innerHTML = elem.value;
+    }
+  }
+  elem.addEventListener('input', rangeValue(elem, target));

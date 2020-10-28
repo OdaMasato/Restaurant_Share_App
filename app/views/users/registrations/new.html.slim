@@ -1,0 +1,44 @@
+#fh5co-main
+  .fh5co-narrow-content
+    h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft" 新規登録
+    .animate-box data-animate-effect="fadeInLeft" = devise_error_messages
+    .animate-box data-animate-effect="fadeInLeft"
+      = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+        .row-bottom-padded-md.my-5
+          .col-md-12.pb-5
+            .field
+              = f.label "アカウント名"
+              br
+              = f.text_field :account_name, class: "form-control", class: "user_edit_input_field"
+        .row-bottom-padded-md.my-5
+          .col-md-12.pb-5
+            .field
+              = f.label "アカウントID"
+              br
+              = f.text_field :account_id, class: "form-control", class: "user_edit_input_field"
+        .row-bottom-padded-md.my-5
+          .col-md-12.pb-5
+            .field
+              = f.label "メールアドレス"
+              br
+              = f.email_field :email, autofocus: true, autocomplete: "email", class: "user_edit_input_field"
+        .row-bottom-padded-md.my-5
+          .col-md-12.pb-5
+            .field
+              = f.label "パスワード"
+              - if @minimum_password_length
+                em
+                  |  (6文字以上)
+              br
+              = f.password_field :password, autocomplete: "new-password", class: "user_edit_input_field"
+        .row-bottom-padded-md.my-5
+          .col-md-12.pb-5
+            .field
+              = f.label "パスワード(確認用)"
+              br
+              = f.password_field :password_confirmation, autocomplete: "new-password", class: "user_edit_input_field"
+          .col-md-12.pb-5
+            .col-md-5.pl-0
+            .col-md-7.pl-0
+              .actions
+                = f.submit "登録", class: 'btn btn-primary'

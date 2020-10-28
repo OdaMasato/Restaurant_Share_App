@@ -1,0 +1,109 @@
+#fh5co-main
+  .fh5co-narrow-content
+  .animate-box data-animate-effect="fadeInLeft"
+    .row-bottom-padded-md
+      .col-md-3.pb-5
+        - if @user.image.file.nil?
+          img src="/assets/profile_image_default.jpeg" class="account_img_big" alt="no image"
+        - else
+          = image_tag(@user.image.to_s, class: "account_img_big")
+
+      .col-md-9.pb-5
+        .col-12
+          h3.account_name_big = @user.account_name
+        .col-12
+          h5.account_id_big = "@#{@user.account_id}"
+        .col-12
+          - if current_user.account_id == @user.account_id
+            - if ! ('guest' == @user.account_id)
+              = link_to 'アカウント編集', edit_user_registration_path, class: 'user_setting_btn', method: :get
+          - else
+              - if -1 == @user.is_current_user_following
+                /nop 
+              - elsif 0 == @user.is_current_user_following
+                = link_to follows_path(id: @user), class: 'follow_btn', method: :post
+                  i.fas.fa-user-check
+                  |  友達になる
+              - elsif 1 == @user.is_current_user_following
+                - if ('todamasao' == @user.account_id) && ('guest' == current_user.account_id)
+                  = link_to follow_path(id: @user), class: 'follow_btn following disabled', method: :delete, disabled: true
+                    i.fas.fa-user-check 
+                    |  友達　
+                - else
+                  = link_to follow_path(id: @user), class: 'follow_btn following', method: :delete
+                    i.fas.fa-user-check 
+                    |  友達　　
+              - elsif 2 == @user.is_current_user_following
+                = link_to follow_path(id: @user), class: 'follow_btn following', method: :delete
+                  i.fas.fa-user-plus
+                  |  友達リクエスト中
+              - elsif 3 == @user.is_current_user_following
+                = link_to follow_path(id: @user), class: 'follow_btn', method: :patch
+                  i.fas.fa-user-plus
+                  |  承認
+              - else
+                / nop
+
+    .row-bottom-padded-md
+      .col-md-12.pb-5
+        - if "mark_restaurant_list" == @disp || nil == @disp
+          - @disp = "mark_restaurant_list"
+          / mark_restaurant表示ボタンを選択表示
+          = link_to user_path(@user,disp: 'mark_restaurant_list'), class: 'user_info_basic_btn selected', method: :get
+            i.fas.fa-bookmark 
+            br
+              = "#{@mark_restaurants.count}"
+        - else
+          / mark_restaurant表示ボタンを通常表示
+          = link_to user_path(@user, disp: 'mark_restaurant_list'), class: 'user_info_basic_btn', method: :get
+            i.fas.fa-bookmark 
+            br
+              = "#{@mark_restaurants.count}"
+
+        - if "went_restaurant_list" == @disp
+          / went_restaurant表示ボタンを選択表示
+          = link_to user_path(@user, disp: 'went_restaurant_list'), class: 'user_info_basic_btn selected', method: :get
+            i.fas.fa-eye
+            br
+              = "#{@went_restaurants.count}"
+        - else
+          / went_restaurant表示ボタンを通常表示
+          = link_to user_path(@user, disp: 'went_restaurant_list'), class: 'user_info_basic_btn', method: :get
+            i.fas.fa-eye
+            br
+              = "#{@went_restaurants.count}"
+
+        - if "show_following_list" == @disp
+          / following表示ボタンを選択表示
+          = link_to user_path(@user, disp: 'show_following_list'), class: 'user_info_basic_btn selected', method: :get
+            | 友達
+            br
+              = "#{@user.followings_count}"
+        - else
+          / following表示ボタンを通常表示
+          = link_to user_path(@user, disp: 'show_following_list'), class: 'user_info_basic_btn', method: :get
+            | 友達
+            br
+              = "#{@user.followings_count}"
+
+    .row-bottom-padded-md
+      .col-md-12.pl-1
+        - if "mark_restaurant_list" == @disp
+          / mark_restaurantリストを表示
+          = render partial: 'show_restaurant_list', locals: {restaurants: @mark_restaurants, disp: @disp}
+          - paginate_arg = @mark_restaurants
+        - elsif "went_restaurant_list" == @disp
+          / went_restaurantリストを表示
+          = render partial: 'show_restaurant_list', locals: {restaurants: @went_restaurants, disp: @disp}
+          - paginate_arg = @went_restaurants
+        - elsif "show_following_list" == @disp
+          / followingリストを表示
+          = render partial: 'show_follow_user_list', locals: {follows: @followings, disp: @disp}
+          - paginate_arg = @followings
+        - else
+          / nop
+
+    .row.row-bottom-padded-md
+      .col.animate-box data-animate-effect="fadeInLeft" = paginate paginate_arg
+    / ☆ページネーション表示用
+    .row.row-bottom-padded-md

@@ -1,0 +1,50 @@
+#fh5co-main
+  .fh5co-narrow-content
+    h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft"  RESTAURANT FIND
+
+    / 入力フォーム・検索ボタン
+    .animate-box data-animate-effect="fadeInLeft" 
+      = form_with url: restaurants_index_path, method: 'get', local: true do |f|
+          .form-group
+            .row
+              .col-md-5
+                - if 'off' == @is_disp_filter
+                  = f.text_field :search, class: 'form-control', placeholder: '例：　東京　イタリアン ', id: 'score'
+                - else
+                  = f.text_field :search, class: 'form-control', placeholder: '地名を入力してください。', id: 'score'
+                = f.hidden_field :is_disp_filter, value: @is_disp_filter
+              .col-md-2
+                = f.submit '検索', class: 'btn btn-light'
+    .row
+    .row.row-bottom-padded-md.animate-box data-animate-effect="fadeInLeft" 
+      .col-md-7
+        - if (@search.present?) && (!("" == @search))
+          |
+            "#{@search}" で検索を行いました。
+  
+      .col-md-3.pl-5.pr-0
+        .filter_descript_text
+          | Following User Contents Only 
+      .col-md-2.pb-2.pl-2
+        .dropdown
+          - if 'off' == @is_disp_filter
+            .dropdownMenuLink.btn.btn-secondary.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" href="" role="button" style="display :block"
+              | OFF
+          - else
+            .dropdownMenuLink.btn.btn-danger.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" href="#" role="button" style="display :block"
+              | ON
+          .dropdown-menu aria-labelledby="dropdownMenuLink" 
+            = link_to "OFF", restaurants_index_path(is_disp_filter: 'off'), class: 'dropdown-item', method: 'get'
+            = link_to "ON", restaurants_index_path(is_disp_filter: 'on'), class: 'dropdown-item', method: 'get'
+
+    / 店舗情報表示
+    - if @restaurants
+      .row
+      - @restaurants.each do |restaurant|
+        = render partial: 'restaurant_list', locals: {restaurant: restaurant, type: ''}
+
+      .row.row-bottom-padded-md
+        .col.animate-box data-animate-effect="fadeInLeft" = paginate @restaurants
+      
+      / ☆ページネーション表示用
+      .row.row-bottom-padded-md

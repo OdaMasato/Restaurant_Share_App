@@ -1,0 +1,35 @@
+#fh5co-main
+  .fh5co-narrow-content
+    h2.fh5co-heading.animate-box data-animate-effect="fadeInLeft" ログイン
+    - if "" != alert
+      p.alert.animate-box data-animate-effect="fadeInLeft" = alert
+    .animate-box data-animate-effect="fadeInLeft"
+      = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+        .row-bottom-padded-md.my-5
+          .col-md-12.pb-5
+            .field
+              = f.label "メールアドレス"
+              br
+              = f.email_field :email, autofocus: true, autocomplete: "email", class: "user_edit_input_field"
+        .row-bottom-padded-md.my-5
+          .col-md-12.pb-5
+            .field
+              = f.label "パスワード"
+              br
+              = f.password_field :password, autocomplete: "current-password", class: "user_edit_input_field"
+        .row-bottom-padded-md.my-5
+          .col-md-12.pb-5
+            .col-md-4.pl-0
+            .col-md-7.ml-5.pl-3
+              .actions
+                = f.submit "ログイン", class: 'btn btn-primary'
+
+      = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+        .row-bottom-padded-md.my-5
+          .col-md-6.text-center
+            | ↓↓本サービスをお試し利用される方はこちら↓↓
+          .col-md-7.pr-5
+            .actions
+              = f.hidden_field :email, value: 'guest@guest.com'
+              = f.hidden_field :password, value: 'guest_recomend_user1'
+              = f.submit "ゲストユーザとしてログインする", class: 'btn btn-secondary', style: 'width: 90%'

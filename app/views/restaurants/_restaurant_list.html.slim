@@ -1,0 +1,45 @@
+.col-md-3.col-sm-6.col-padding.animate-box data-animate-effect="fadeInLeft" 
+  .blog-entry
+    - if "home" == type
+      / イメージ画像(押下時、ぐるなび画面遷移)
+      a.blog-img href="#{restaurant.gurunavi_url}"
+        img.img-responsive alt=("#{restaurant.name}") src="#{restaurant.image_url}"
+    - else
+      / イメージ画像
+      a.blog-img href="#{restaurants_show_path(restaurant.attributes)}"
+        img.img-responsive alt=("#{restaurant.name}") src="#{restaurant.image_url}"
+    
+    .desc
+      - if "home" == type
+        / 飲食店名(押下時、ぐるなび画面遷移)
+        h3.card_title
+          a href="#{restaurant.gurunavi_url}"  #{restaurant.name}
+      - else
+        / 飲食店名
+        h3.card_title
+          a href="#{restaurants_show_path(restaurant.attributes)}"  #{restaurant.name}
+
+      / アクセス
+      span
+        small ="#{restaurant.access_station}から徒歩#{restaurant.access_walk}分"
+
+      / PR文
+      p.card_pr_short ="#{restaurant.pr_short}"
+
+      / 評価
+      - if "home" != type
+        - if restaurant.score_avg
+          - score_tmp = restaurant.score_avg
+          - for i in (1..5) do
+            - if (0 < score_tmp)
+              - if (1 <= score_tmp)
+                i.fas.fa-star
+              - else
+                i.fas.fa-star-half-alt
+            - else
+              i.far.fa-star
+            - score_tmp-=1
+          - if 0 < restaurant.mark_restaurant_count
+            .score_text = " #{restaurant.score_avg}"
+          - else
+            .score_text = " -"

@@ -30,16 +30,26 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  # rspec(テストライブラリ)を導入する
+  gem 'rspec-rails'
+  # factorybot(テストデータ作成支援絵ライブラリ)を導入する
+  gem 'factory_bot_rails'
+  # webmock(テスト時に仮想サーバとしてレスポンスを返すライブラリ)を導入する
+  gem 'webmock'
 end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
   gem 'listen', '~> 3.2'
+  gem 'web-console', '>= 3.3.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+
+  # better_errors/binding_of_caller(デバッグ用)を導入する
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 group :test do
@@ -51,4 +61,40 @@ group :test do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+
+# slim(View出力のテンプレートエンジン)を導入する
+gem 'html2slim'
+gem 'slim-rails'
+
+# bootstrap(cssテンプレート)を導入する
+gem 'bootstrap'
+
+# devise(ユーザ認証機能のライブラリ)を導入する
+gem 'devise'
+
+# pry-hoge(デバッグ用ライブラリ)を導入する
+gem 'pry-byebug'
+gem 'pry-doc'
+gem 'pry-rails'
+
+# kaminari(ページネーションライブラリ)を導入する
+gem 'kaminari'
+
+# font-awesome-sass(アイコンセットライブラリ)を導入する
+gem 'font-awesome-sass'
+
+# carrier(画像アップロードライブラリ)を導入する
+gem 'carrierwave'
+
+# carrier(画像アップロードライブラリ(aws))を導入する
+gem 'carrierwave-aws'
+
+# gon(jsでrails変数を扱うためのライブラリ)を導入する
+gem 'gon'
+
+# rubocop(構文の静的解析ツール)を導入する
+gem 'rubocop', require: false
+gem 'rubocop-performance', require: false
+gem 'rubocop-rails', require: false
+gem 'rubocop-rspec'

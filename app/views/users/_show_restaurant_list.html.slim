@@ -1,0 +1,38 @@
+/ 店舗情報表示
+- if restaurants
+  .row.row-bottom-padded-md
+  - restaurants.each do |restaurant|
+      .col-md-3.col-sm-6.col-padding.animate-box data-animate-effect="fadeInLeft" 
+        .blog-entry
+
+          / イメージ画像
+          a.blog-img href="#{restaurants_show_path(restaurant.attributes)}"
+            img.img-responsive alt=("#{restaurant.name}") src="#{restaurant.image_url}"
+          .desc
+            / 飲食店名
+            h3.card_title
+              a href="#{restaurant.gurunavi_url}"  #{restaurant.name}
+
+            / アクセス
+            span
+              small ="#{restaurant.access_station}から徒歩#{restaurant.access_walk}分"
+
+            / PR文
+            p.card_pr_short ="#{restaurant.pr_short}"
+
+            / 評価
+            - if restaurant.score
+              - score_tmp = restaurant.score
+              - for i in (1..5) do
+                - if (0 < score_tmp)
+                  - if (1 <= score_tmp)
+                    i.fas.fa-star
+                  - else
+                    i.fas.fa-star-half-alt
+                - else
+                  i.far.fa-star
+                - score_tmp-=1
+              - if 0 < restaurant.mark_restaurant_count
+                .score_text = " #{restaurant.score}"
+              - else
+                .score_text = " -"

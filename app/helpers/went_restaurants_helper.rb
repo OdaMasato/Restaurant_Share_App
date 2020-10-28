@@ -1,0 +1,2 @@
+module WentRestaurantsHelper
+end
